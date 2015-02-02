@@ -108,7 +108,7 @@ function map(){
     
     //method for selecting features of other components
     function selFeature(value){
-        //...
+        // TA LAND OCH KALLA PÅ DE ANDRA
     }
 }
 

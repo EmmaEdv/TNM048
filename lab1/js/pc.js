@@ -121,28 +121,34 @@ function pc(){
     // Handles a brush event, toggling the display of foreground lines.
     function brush() {
         // finns det värden, spara dem i actives aka markerade länder
-        var countryNames;
+        var brushCountry = [];
         var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
             // hitta intervallet  och spara
             extents = actives.map(function(p) { return y[p].brush.extent(); });
             // Visa dessa markerade mha css
         foreground.style("display", function(d) {
             return actives.every(function(p, i) {
-                countryNames.push(d["Country"]);
                 // ligger värdet i intervallet ? ja: foreground style = null else: foreground style: "none"
-                return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+                var isSelected = extents[i][0] <= d[p] && d[p] <= extents[i][1];
+                // KAN NOG LÖSAS SNYGGARE
+                if(isSelected) {
+                    brushCountry.push(d["Country"]);
+                    console.log("land " + d["Country"]);
+                }
+                return isSelected;
             }) ? null : "none";
+                   
         });
-        //Hämta namnet mha extents ovan
-        brush.extent(countryNames);
-        //brush.event()
-        //Anropa brush i map.js och sp.js mha brush.event(landets namn) tex
-
+        // "higlight" the selected countries.
+        sp1.selectDot(brushCountry);
     }
 
     //method for selecting the pololyne from other components	
     this.selectLine = function(value){
-        //...
+        foreground.style("display", function(d) {
+            return d["Country"] == value ? null : "none";
+        });
+
     };
     
     //method for selecting features of other components
