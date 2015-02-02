@@ -133,7 +133,6 @@ function pc(){
                 // KAN NOG LÖSAS SNYGGARE
                 if(isSelected) {
                     brushCountry.push(d["Country"]);
-                    console.log("land " + d["Country"]);
                 }
                 return isSelected;
             }) ? null : "none";

@@ -14,7 +14,9 @@ function sp(){
     var color20 = d3.scale.category20();
     var color20b = d3.scale.category20b();
     //initialize tooltip
-    //...
+    var div = d3.select("body").append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
 
 //var countryText = svg.selectAll("text").data(self.data)
 
@@ -126,20 +128,21 @@ function sp(){
             .attr("r", function(d){
                 return d["Life satisfaction"]/8;
             })
-            //tooltip
             .on("mousemove", function(d) {
-                //...    
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(d["Country"])
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px"); 
             })
             .on("mouseout", function(d) {
-                //...   
+                div.transition()        
+                    .duration(500)      
+                    .style("opacity", 0);  
             })
             .on("click",  function(d) {
-                //console.log(d["Country"]);var extentFoo = [[86,88], []];
                 selFeature(d)
-                //brush.extent(extentFoo);
-                //brush.event;
-                //brushed();
-                //return append("text").text(d["Country"]);
             });
     }
 
@@ -162,7 +165,6 @@ function sp(){
     
     //method for selecting features of other components
     function selFeature(value){
-        //...
         svg.selectAll(".dot").attr("fill", function(d){ //
             // Select lines in pc
             pc1.selectLine(value["Country"]);

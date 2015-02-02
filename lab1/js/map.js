@@ -10,15 +10,11 @@ function map(){
         width = mapDiv.width() - margin.right - margin.left,
         height = mapDiv.height() - margin.top - margin.bottom;
 
-    //initialize color scale
-    //...
-    //Nånting 20 färger
-    var color = d3.scale.category20().range();
-    //Färgskala?
-    var colorScale = d3.scale.ordinal().range(color);
 
     //initialize tooltip
-    //...
+    var div = d3.select("body").append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
 
     var projection = d3.geo.mercator()
         .center([50, 60 ])
@@ -38,14 +34,8 @@ function map(){
     d3.json("data/world-topo.json", function(error, world) {
         var countries = topojson.feature(world, world.objects.countries).features;
 
-        //load summary data
-        //...
-
         d3.csv("data/OECD-better-life-index-hi.csv", function(error, data) {
             self.data = data;
-            
-            //define the domain of the scatter plot axes
-            //...  
             draw(countries, self.data);
         });
         
@@ -74,22 +64,24 @@ function map(){
                 });
                 return cColor;
             })
-            /*.attr("fill", function(d){
-                /*if(country name == country name in current data file)
-                return only if the country exists in the csv file
-                    return color(d["Household income"]);
-            })*/
-            //.style()
-            //tooltip
             .on("mousemove", function(d) {
-                //...
+                console.log("ÖVER");
+                console.log(d["Country"]);
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(d.properties.name)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY) + "px"); 
             })
-            .on("mouseout",  function(d) {
-                //...
+            .on("mouseout", function(d) {
+                div.transition()        
+                    .duration(500)      
+                    .style("opacity", 0);  
             })
             //selection
             .on("click",  function(d) {
-                //...
+                selFeature(d);
             });
 
     }
@@ -108,7 +100,10 @@ function map(){
     
     //method for selecting features of other components
     function selFeature(value){
-        // TA LAND OCH KALLA PÅ DE ANDRA
+        var sendCounrty = [];
+        sendCounrty.push(value.properties.name);
+        sp1.selectDot(sendCounrty);
+        pc1.selectLine(sendCounrty);
     }
 }
 
