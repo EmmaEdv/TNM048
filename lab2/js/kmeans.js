@@ -5,127 +5,129 @@
     * @return {Object}
     */
 
-function calDistance(centriodPos, pointPos) {
-    return Math.sqrt(Math.pow(centriodPos.A - pointPos.A, 2) + Math.pow(centriodPos.B - pointPos.B, 2) + Math.pow(centriodPos.C - pointPos.C, 2));
-}
-function sumOfSquaredErrorz(centriodPos, pointPos) {
-    return Math.pow(centriodPos.A - pointPos.A, 2) + Math.pow(centriodPos.B - pointPos.B, 2) + Math.pow(centriodPos.C - pointPos.C, 2);
-}
-function calAvg(centriodVal, pointVal) {
-    return Math.pow(centriodVal - pointVal, 2);
+function calDistance(dim, centroid, point) {
+    var dist = 0;
+    for(var i = 0; i < dim.length; i++) {
+        dist += Math.pow(centroid[dim[i]] - point[dim[i]],2)
+    }
+    return Math.sqrt(dist);
 }
 
 // 2. SET POINTS THAT BELONGS TO A CLUSTER
-function setCluster(data, k, clusterArray){
-    var assignedArray = [];
-    var AVGCluster = [];
-
-    for(var t = 0; t < k; t = t + 1) {
-        AVGCluster[t] = {
-            avgA: 0,
-            avgB: 0,
-            avgC: 0,
-            n: 0
-        };
-    }
-
-    data.forEach(function(d, i) {
-        var minDist = 2, clusterId = -1;
-        for(var j = 0; j < k; j = j + 1) {
-            if(calDistance(d, clusterArray[j]) < minDist){
-                minDist = calDistance(d, clusterArray[j]);
-                clusterId = j;
+function setCluster(dim, centroids, data){
+    var assignedData = [];
+   
+    // Sätter punkter tillhörande närmsta centroid
+    data.forEach( function(d, i) {
+        assignedData[i] = {};
+        var clusterId = -1;
+        var dist = Number.MAX_VALUE;
+        for(var c = 0; c < centroids.length; c++) {
+            if(calDistance(dim, centroids[c], d) < dist) {
+                dist = calDistance(dim, centroids[c], d);
+                clusterId = c;
             }
         }
-        assignedArray.push({
-            dataIndex: i,
-            clusterIndex: clusterId
-        });
 
-        AVGCluster[clusterId].avgA = AVGCluster[clusterId].avgA + calAvg(clusterArray[clusterId].A, d.A);
-        AVGCluster[clusterId].avgB = AVGCluster[clusterId].avgB + calAvg(clusterArray[clusterId].B, d.B);
-        AVGCluster[clusterId].avgC = AVGCluster[clusterId].avgC + calAvg(clusterArray[clusterId].C, d.C);
-        AVGCluster[clusterId].n = AVGCluster[clusterId].n + 1;
-    })
-
-    return [assignedArray, AVGCluster];
-}
-
-
-    // 3. RECALCULATE CENTROIDS POS BY CAL. AVG.
-function recalCluster(clusterArray) {
-    var recalCluster = [];
-    clusterArray.forEach( function(a) {
-        recalCluster.push({
-            A: (a.avgA/a.n).toFixed(6),
-            B: (a.avgB/a.n).toFixed(6),
-            C: (a.avgC/a.n).toFixed(6)
-        });   
-    })
-
-    return recalCluster;
-}
-
-    // 4. CAL DIFF BETWEEN CENTRIODS
-function calDiff(prevCluster, updatedCluster, k) {
-    var thresh = 0.1;
-    for(var r = 0; r < k; r = r + 1){
-        if(sumOfSquaredErrorz(prevCluster[r], updatedCluster[r]) > thresh){
-            return false;
+        if(assignedData[i]["clusterId"] == -1 || assignedData[i]["clusterId"] == null){
+            for(var j = 0; j < dim.length; j++) {
+                assignedData[i][dim[j]] = d[dim[j]];
+            }
+            
+            assignedData[i]["clusterId"] = clusterId;
         }
-    }   
+        
+    });
 
+    return assignedData;
+}
+
+
+// 3. RECALCULATE CENTROIDS POS BY CAL. AVG.
+function recalCluster(clusterdData, centroids, dim) {
+    //En centroid i taget, vilka punkter tillhör mig? sspara dist och antal punkter
+    var newCentroids = [];
+    centroids.forEach(function(c, i) {
+        var avgDist = [];
+        var n = 0;
+
+        clusterdData.forEach(function(d) {
+            console.log("i: " + i + " CLUSTER ID: "  + d.clusterId)
+            // ÄR ID SAMMA SOM i
+            if(d.clusterId == i) {
+                //Räkna avstånd för varje dim mellan centroid och punkt
+                n++;
+                for(var j = 0; j < dim.length; j++){
+                    avgDist[dim[j]] = Math.pow( c[dim[j]] - d[dim[j]] , 2);
+                }
+            }
+        })
+
+        for(var j = 0; j < dim.length; j++){
+            if(n==0)
+                console.log("error")
+            else
+                avgDist[dim[j]] /= n;
+
+        }
+        newCentroids[i] = avgDist;
+    })
+
+    return newCentroids;
+}
+
+// 4. CAL DIFF BETWEEN CENTRIODS
+function calDiff(oldCentroids, newCentroids, dim) {
+    var thresh = 0.000001;
+    for(var j = 0; j < newCentroids.length; j++){
+        for(var i = 0; i < dim.length; i++){
+            var diff = Math.sqrt(Math.pow(oldCentroids[j][dim[i]] - newCentroids[j][dim[i]], 2));
+            //console.log(i, j, oldCentroids[j][dim[i]], newCentroids[j][dim[i]], diff);
+            if(diff > thresh){
+                return false;
+            }
+        }
+    }
     return true;
 }
 
 function kmeans(data, k) {
+    var dim = Object.keys(data[0]);
+
+    var randomCentriod = [];
+    // SET RANDOM CLUSTER POINTS
+    for(var i = 0; i < k; i++) {
+        randomCentriod[i] = [];
+        for(var d = 0; d < dim.length; d++) {
+            randomCentriod[i][dim[d]] = Math.random();
+        }
+    }
     
+    //Step 2
+    var clusterdPoints = setCluster(dim, randomCentriod, data);
 
-    // cluster
-    var clusterArray = [];
+    //Step 3
+    var updatedCentroids = recalCluster(clusterdPoints, randomCentriod, dim);
 
-    /*var extentA = d3.extent(data.A);
-    var extentB = d3.extent(data.B);
-    var extentC = d3.extent(data.C);*/
-    var extentA = [0,1], extentB = [0,1], extentC = [0,1];
-
-    // SETT K CLUSTERS
-    /*k.forEach( function(d) { */
-    for(var i = 0; i < k; i = i + 1) {
-        clusterArray.push({ 
-            A: Math.random().toFixed(6),
-            B: Math.random().toFixed(6),
-            C: Math.random().toFixed(6)
-        });
+    //Step 4
+    var isGood = calDiff(randomCentriod, updatedCentroids, dim);
+    var howMany = 0;
+    //PLÖTSLIGT FÅR ALLA KLUSTER ID: 1, VARFÖR?
+    while(!isGood){
+        var previousCentroid = updatedCentroids;
+        //Step 2
+        clusterdPoints = setCluster(dim, previousCentroid, data);
+        //Step 3
+        updatedCentroids = recalCluster(clusterdPoints, previousCentroid, dim);
+        //Step 4
+        isGood = calDiff(previousCentroid, updatedCentroids, dim);
+        console.log(previousCentroid, updatedCentroids)
+        howMany++;
     }
-
-    var isGood = false;
-    var clusterRes = setCluster(data, k, clusterArray);
-    var clusterPoints = clusterRes[0];
-    var avgDistCluster = clusterRes[1];
-    // STEP 3
-    var foo = clusterArray;
-    var newClusters = recalCluster(avgDistCluster);
-    // STEP 4
-    isGood = calDiff(clusterArray, newClusters, k);
-
-    while(!isGood) {
-        // STEP 2
-        clusterRes = setCluster(data, k, newClusters);
-        clusterPoints = clusterRes[0];
-        avgDistCluster = clusterRes[1];
-        // STEP 3
-        foo = newClusters;
-        newClusters = recalCluster(avgDistCluster);
-        // STEP 4
-        isGood = calDiff(foo, newClusters, k);
-        isGood = true;
-    }
-
-    return clusterPoints;
-
+console.log(howMany);
+    return clusterdPoints;
 };
 
-// VI SKA DELA UPP ALL I FUNC OCH SEDAN RETUNERA ARRY:ER OCH OM DE ÄR BRA SKICKA TILL PC.JS
+
 
     
