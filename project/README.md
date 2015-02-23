@@ -1,3 +1,3 @@
 Todo list
 
-- Din kropp behöver
+- [] Din kropp behöver
