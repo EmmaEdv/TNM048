@@ -23,8 +23,9 @@ function setCluster(dim, centroids, data){
         var clusterId = -1;
         var dist = Number.MAX_VALUE;
         for(var c = 0; c < centroids.length; c++) {
-            if(calDistance(dim, centroids[c], d) < dist) {
-                dist = calDistance(dim, centroids[c], d);
+            var distRes = calDistance(dim, centroids[c], d);
+            if(distRes < dist) {
+                dist = distRes;
                 clusterId = c;
             }
         }
@@ -48,29 +49,37 @@ function recalCluster(clusterdData, centroids, dim) {
     //En centroid i taget, vilka punkter tillhör mig? sspara dist och antal punkter
     var newCentroids = [];
     centroids.forEach(function(c, i) {
-        var avgDist = [];
+        var avgDist = {};
+        for(var it = 0; it < dim.length; it++){
+            avgDist[dim[it]] = 0;
+        }
         var n = 0;
 
         clusterdData.forEach(function(d) {
-            console.log("i: " + i + " CLUSTER ID: "  + d.clusterId)
+        
             // ÄR ID SAMMA SOM i
             if(d.clusterId == i) {
                 //Räkna avstånd för varje dim mellan centroid och punkt
                 n++;
                 for(var j = 0; j < dim.length; j++){
-                    avgDist[dim[j]] = Math.pow( c[dim[j]] - d[dim[j]] , 2);
+                    avgDist[dim[j]] += +d[dim[j]];
                 }
             }
         })
 
         for(var j = 0; j < dim.length; j++){
-            if(n==0)
+            if(n==0) {
+               // console.log(c)
                 console.log("error")
+            }
             else
                 avgDist[dim[j]] /= n;
 
         }
         newCentroids[i] = avgDist;
+        /*console.log("NEWCENTRIODS")
+        console.log(newCentroids[i])
+        console.log("END NEWCENTRIODS")*/
     })
 
     return newCentroids;
@@ -82,7 +91,6 @@ function calDiff(oldCentroids, newCentroids, dim) {
     for(var j = 0; j < newCentroids.length; j++){
         for(var i = 0; i < dim.length; i++){
             var diff = Math.sqrt(Math.pow(oldCentroids[j][dim[i]] - newCentroids[j][dim[i]], 2));
-            //console.log(i, j, oldCentroids[j][dim[i]], newCentroids[j][dim[i]], diff);
             if(diff > thresh){
                 return false;
             }
@@ -112,8 +120,8 @@ function kmeans(data, k) {
     //Step 4
     var isGood = calDiff(randomCentriod, updatedCentroids, dim);
     var howMany = 0;
-    //PLÖTSLIGT FÅR ALLA KLUSTER ID: 1, VARFÖR?
-    while(!isGood){
+    //PLÖTSLIGT FÅR ALLA KLUSTER ID: 1, VARFÖR? 
+   while(!isGood){
         var previousCentroid = updatedCentroids;
         //Step 2
         clusterdPoints = setCluster(dim, previousCentroid, data);
@@ -121,8 +129,9 @@ function kmeans(data, k) {
         updatedCentroids = recalCluster(clusterdPoints, previousCentroid, dim);
         //Step 4
         isGood = calDiff(previousCentroid, updatedCentroids, dim);
-        console.log(previousCentroid, updatedCentroids)
+       // console.log(previousCentroid, updatedCentroids)
         howMany++;
+        if (howMany > 10) break;
     }
 console.log(howMany);
     return clusterdPoints;
