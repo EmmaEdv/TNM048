@@ -27,7 +27,7 @@ function pc(){
     
     d3.csv("data/livsmedelKomma.csv", function(data) {
         self.data = data;
-        console.log(data[0])
+        //console.log(data[0])
         var index = 0;
         var dataFoo = [];
      
@@ -42,7 +42,7 @@ function pc(){
                 index++;
             }
         });
-        console.log(dataFoo)
+        //console.log(dataFoo)
         /*var g = svg.selectAll(".arc")
             .data(pie(dataFoo))
             .enter().append("g")
@@ -67,7 +67,7 @@ function pc(){
             .style("fill", function(d) { 
                 var sendColor = color(indexColor);
                 indexColor++;
-                console.log(indexColor);
+                //console.log(indexColor);
                 return sendColor;
             });
 

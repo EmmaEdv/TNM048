@@ -1,0 +1,190 @@
+
+    {
+        "name": "Abborre file panerad stekt",
+        "children":[ 
+            {
+                "name": "Fettsyror",
+                "children": [
+                    {
+                        "name": "Summa mättade fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 4:0-10:0(g)", "size": 2},
+                            {"name": "Fettsyra 12:0(g)", "size": 0},
+                            {"name": "Fettsyra 14:0(g)", "size": 0},
+                            {"name": "Fettsyra 16:0(g)", "size": 0},
+                            {"name": "Fettsyra 18:0(g)", "size":  1},
+                            {"name": "Fettsyra 20:0(g)", "size":  0}
+                        ]
+                    },
+                    {
+                        "name": "Summa enkelomättade fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 16:1(g)", "size": 0},
+                            {"name": "Fettsyra 18:1(g)", "size": 0}
+                        ],
+                    },
+                    {
+                        "name": "Summa fleromättade fettsyror(g)", "size": 1
+                    },
+                    {
+                        "name": "Summa n-6 fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 18:2(g)", "size": 0},
+                            {"name": "Fettsyra 20:4(g)", "size": 0}
+                        ]
+                    },
+                    {
+                        "name": "Summa n-3 fettsyror(g)",
+                        "children": [ 
+                            {"name": "Fettsyra 18:3(g)", "size": 0} 
+                        ]
+                    },
+                    {
+                        "name": "Summa långa n-3 fettsyror(g)",
+                        "children":[
+                            {"name": "EPA (Fettsyra 20:5)(g)", "size": 0},
+                            {"name": "DPA (Fettsyra 22:5)(g)", "size": 0},
+                            {"name": "DHA (Fettsyra 22:6)(g)", "size": 0}
+                        ],
+                    }
+                    {
+                        "name": "Summa transfettsyror(g)", "size": 6
+                    }
+                ]
+            }, 
+            {
+                "name": "fettlösliga vitaminer",
+                "children": [
+                    {"name": "Vitamin A()", "size": 2},
+                    {"name": "Retinol(µg)", "size": 0},
+                    {"name": "beta-Karoten(µg)", "size": 0},
+                    {"name": "Vitamin D(µg)", "size": 4},
+                    {"name": "Vitamin E(mg)", "size": 1},
+                    {"name": "Vitamin K(µg)", "size": 0}
+                ]
+            },
+            {
+                "name": "vattenlösliga vitaminer",   
+                "children": [ 
+                    {"name": "Tiamin(mg)", "size": 1},
+                    {"name": "Riboflavin(mg)", "size": 3},
+                    {"name": "Vitamin C(mg)", "size": 9},
+                    {"name": "Niacin(mg)", "size": 2},
+                    {"name": "Niacinekvivalenter()", "size": 1},
+                    {"name": "Vitamin B6(mg)", "size": 1},
+                    {"name": "Vitamin B12(µg)", "size": 2},
+                    {"name": "Fosfor(mg)", "size": 1},
+                    {"name": "Folat(µg)", "size": 3}
+                ]
+            },
+            {
+                "name": "mineraler",
+                "children": [
+                    {"name": "Jod(µg)", "size": 0},
+                    {"name": "Avfall (skal etc.)(%)", "size": 0},
+                    {"name": "Järn(mg)", "size": 0},
+                    {"name": "Kalcium(mg)", "size": 5},
+                    {"name": "Kalium(mg)", "size": 0},
+                    {"name": "Magnesium(mg)", "size": 5},
+                    {"name": "Natrium(mg)", "size": 0},
+                    {"name": "Selen(µg)", "size": 1},
+                    {"name": "Zink(mg)", "size": 0}
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Abborre file panerad stekt",
+        "children":[ 
+            {
+                "name": "Fettsyror",
+                "children": [
+                    {
+                        "name": "Summa mättade fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 4:0-10:0(g)", "size": 3},
+                            {"name": "Fettsyra 12:0(g)", "size": 0},
+                            {"name": "Fettsyra 14:0(g)", "size": 1},
+                            {"name": "Fettsyra 16:0(g)", "size": 0},
+                            {"name": "Fettsyra 18:0(g)", "size":  1},
+                            {"name": "Fettsyra 20:0(g)", "size":  0}
+                        ]
+                    },
+                    {
+                        "name": "Summa enkelomättade fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 16:1(g)", "size": 2},
+                            {"name": "Fettsyra 18:1(g)", "size": 5}
+                        ],
+                    },
+                    {
+                        "name": "Summa fleromättade fettsyror(g)", "size": 1
+                    },
+                    {
+                        "name": "Summa n-6 fettsyror(g)",
+                        "children": [
+                            {"name": "Fettsyra 18:2(g)", "size": 2},
+                            {"name": "Fettsyra 20:4(g)", "size": 4}
+                        ]
+                    },
+                    {
+                        "name": "Summa n-3 fettsyror(g)",
+                        "children": [ 
+                            {"name": "Fettsyra 18:3(g)", "size": 0} 
+                        ]
+                    },
+                    {
+                        "name": "Summa långa n-3 fettsyror(g)",
+                        "children":[
+                            {"name": "EPA (Fettsyra 20:5)(g)", "size": 1},
+                            {"name": "DPA (Fettsyra 22:5)(g)", "size": 2},
+                            {"name": "DHA (Fettsyra 22:6)(g)", "size": 3}
+                        ],
+                    }
+                    {
+                        "name": "Summa transfettsyror(g)", "size": 6
+                    }
+                ]
+            }, 
+            {
+                "name": "fettlösliga vitaminer",
+                "children": [
+                    {"name": "Vitamin A()", "size": 2},
+                    {"name": "Retinol(µg)", "size": 1},
+                    {"name": "beta-Karoten(µg)", "size": 2},
+                    {"name": "Vitamin D(µg)", "size": 4},
+                    {"name": "Vitamin E(mg)", "size": 1},
+                    {"name": "Vitamin K(µg)", "size": 4}
+                ]
+            },
+            {
+                "name": "vattenlösliga vitaminer",   
+                "children": [ 
+                    {"name": "Tiamin(mg)", "size": 6},
+                    {"name": "Riboflavin(mg)", "size": 3},
+                    {"name": "Vitamin C(mg)", "size": 9},
+                    {"name": "Niacin(mg)", "size": 2},
+                    {"name": "Niacinekvivalenter()", "size": 6},
+                    {"name": "Vitamin B6(mg)", "size": 1},
+                    {"name": "Vitamin B12(µg)", "size": 2},
+                    {"name": "Fosfor(mg)", "size": 3},
+                    {"name": "Folat(µg)", "size": 3}
+                ]
+            },
+            {
+                "name": "mineraler",
+                "children": [
+                    {"name": "Jod(µg)", "size": 1},
+                    {"name": "Avfall (skal etc.)(%)", "size": 2},
+                    {"name": "Järn(mg)", "size": 2},
+                    {"name": "Kalcium(mg)", "size": 5},
+                    {"name": "Kalium(mg)", "size": 4},
+                    {"name": "Magnesium(mg)", "size": 5},
+                    {"name": "Natrium(mg)", "size": 3},
+                    {"name": "Selen(µg)", "size": 1},
+                    {"name": "Zink(mg)", "size": 3}
+                ]
+            }
+        ]
+    }
+}
