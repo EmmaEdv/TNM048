@@ -16,9 +16,10 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/colorbrewer.css">
+        <link rel="stylesheet" href="css/barchart.css">
 
         <!--modules css-->
-        <link rel="stylesheet" href="css/pc.css">
+        <link rel="stylesheet" href="css/donut.css">
         
 
     </head>
@@ -41,6 +42,7 @@
                             <span class="icon-bar"></span>
                         </button>
                         <a class="navbar-brand" href="#">Project Nutrition</a>
+                        
                     </div>
                 </div>
             </div>
@@ -51,7 +53,13 @@
             <div class="container">
                 <!-- row of columns -->
                 <br><br><br>
-                <div id="pc" style="height: 80vh"></div>
+                <div class="row">
+                    <div class="col-xs-6" id="donut" style="height: 70vh"></div>
+                    <div class="col-xs-6" id="barChart" style="height: 70vh"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" id="checkBox" style="height: 10vh"></div>        
+                </div>
             </div>
 
 
@@ -71,10 +79,14 @@
         <script src="js/vendor/topojson.v1.min.js"></script>
         <script src="js/vendor/underscore-min.js"></script>
         <script src="js/vendor/colorbrewer.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script> <!-- FÖR TIP d3js-->
 
         <!--modules js-->
-        <script src="js/pc.js"></script>
+        <script src="js/donut.js"></script>
+        <script src="js/checkboxes.js"></script>
+        <script src="js/barchart.js"></script>
         <script src="js/main.js"></script>
+       
 
     </body>
 </html>
