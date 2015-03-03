@@ -1,0 +1,17 @@
+svg {
+    font: 10px sans-serif;
+}
+
+body {
+  font: 10px sans-serif;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+.text {
+    text-anchor: middle;
+    font: 15px sans-serif;
+    color: #8a89a6;
+}
