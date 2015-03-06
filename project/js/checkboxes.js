@@ -38,7 +38,7 @@ function checkboxes(){
         typeOfDatum.forEach(function(f){
             summedValueOfDatum.push({
                 type: f,
-                sum: +summedIntake[f]     
+                sum: +summedIntake[f]    
             })
         })
         

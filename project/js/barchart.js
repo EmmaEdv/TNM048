@@ -26,12 +26,14 @@ function barchart() {
                 ,"600", "150", "15", "800", "3.1"
                 ,"280", "2300", "50", "7"];
     // folat = bra för kvinnor   Niacinekvivalenter()= niacin typ
-
+    var barDiv = $("#barChart");
     var color = d3.scale.category20();
-    var margin = {top: 40, right: 30, bottom: 30, left: 40},
+    var margin = {top: 100, right: 30, bottom: 70, left: 40},
     //width = 960 - margin.left - margin.right,
-    width = 1300 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = barDiv.width() - margin.left - margin.right,
+    height = barDiv.height() - margin.top - margin.bottom;
+    //width = 1300 - margin.left - margin.right,
+    //height = 500 - margin.top - margin.bottom;
 
     var formatPercent = d3.format("0%");
 
@@ -131,11 +133,29 @@ function barchart() {
         x.domain(intake.map(function(d) { return d.type; }));
         y.domain([0, 100]);
         svg.selectAll('*').remove();
-        
+
+        var modIndex = 0;
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
+            //.attr("transform","rotate(-45)")
             .call(xAxis);
+
+        /*svg.append("g")
+            .attr("class", "xaxis axis")  // two classes, one for css formatting, one for selection below
+            .attr("transform", "translate(0," + (height) + ")")
+            .call(xAxis);*/
+
+        svg.selectAll(".tick.major text")
+            //.attr("text-anchor", "middle")  // select all the text elements for the xaxis
+            .attr("transform", function(d) {
+                    return "translate(" + 0 + "," + 0 + ")rotate(-45)";
+                }).style("text-anchor", "end");
+      
+       // svg.append("g").style("fill", "red")  // select all the text elements for the xaxis
+          /*.attr("transform", function(d) {
+             return "translate(0," + height + ")rotate(-45)";
+         }).attr("transform","rotate(-45)").call(xAxis);*/
 
         svg.append("g")
             .attr("class", "y axis")
@@ -148,6 +168,7 @@ function barchart() {
             .text("Procent");
             
         var indexColor = 0;
+        var aboveMax = [];
         svg.selectAll(".bar")
             .data(intake)
             .enter().append("rect")
@@ -157,11 +178,20 @@ function barchart() {
             })
             .attr("width", x.rangeBand())
             .attr("y", function(d, i) {
-                return height - (height*procent(d,i)); })
+                var procentY = procent(d,i);
+                if(procentY > 1)
+                    procentY = 1.1;
+
+                return height - (height*procentY); })
             .attr("height", function(d,i) { 
                 //var fooo = height - (height*procent(d,i));
-                var fooo = (height*procent(d,i));
-                return (fooo); })
+                var procentHeight = (procent(d,i));
+                if(procentHeight > 1) { // FÖR ATT DEN BLIR FÖR STOR. Sen clippar vi den
+                    procentHeight = 1.1;
+                    aboveMax.push(+i);
+                } 
+
+                return (height*procentHeight); })
             .style("fill", function(d) { 
                 var sendColor = color(indexColor);
                 indexColor++;
@@ -169,6 +199,80 @@ function barchart() {
             })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
+
+            // TOMMA BARA FÖR ATT VIS TIP
+            svg.selectAll(".tipbar")
+            .data(intake)
+            .enter().append("rect")
+            .attr("class", "tipbar")
+            .attr("x", function(d) {
+                return x(d.type);
+            })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d, i) {
+                return height; })
+            .attr("height", function(d,i) { 
+                return (height); })
+            .style("opacity", "0")
+            //.on('mouseover', tip.show)
+            .on('mouseover', function(d,i) {
+                        // tip.show(d, i);
+                        return tip.show.apply(this, arguments);
+                   
+                    return tip.hide.apply(this, arguments);
+                })
+            .on('mouseout', tip.hide)
+            //.on('mouseout', tip.hide)
+
+            /*<svg>
+                <!--VWT Inte HUR MAN GÖR DETTTTTA I CSSSS!!!!-->
+                <defs>
+                   <linearGradient id="Gradient-1" x1="3%" y1="4%" x2="6%" y2="6%"  >
+                     <stop offset="0%" stop-color= "red" />
+                     <stop offset="50%" stop-color= "white" />
+                   </linearGradient>
+
+                   <linearGradient id="repeat" xlink:href="#Gradient-1" spreadMethod="repeat" />
+                </defs>
+            </svg>*/
+
+            var defs = svg.append("defs");
+            var linG = defs.append("svg:linearGradient")
+                .attr("id", "Gradient-1")
+                .attr("x1", "3%")
+                .attr("y1", "4%")
+                .attr("x2", "6%")
+                .attr("y2", "6%")
+                .attr("spreadMethod", "repeat");
+            linG.append("stop")
+                .attr("offset", "0%")
+                .attr("stop-color", "red");
+            linG.append("stop")
+                .attr("offset", "50%")
+                .attr("stop-color", "white");
+           
+            // FÖR ÖVER 100%
+            svg.selectAll(".above")
+                .data(intake).enter()
+                .append("rect")
+                //.attr("class", "grad2")
+                .attr("x", function(d) {return x(d.type);})
+                .attr("width", x.rangeBand()).attr("y", (height-(height*1.1)))
+                .attr("height", (height*0.1))
+                .style("fill", "url(#Gradient-1)")
+                .style("opacity", function(a, i) {
+                    return procent(a,i) > 1 ? .5 : 0; 
+                })
+                .on('mouseover', function(d,i) {
+                    if(aboveMax.some(function(a) { return i === a; })) {
+                        // tip.show(d, i);
+                        return tip.show.apply(this, arguments);
+                    }
+                    return tip.hide.apply(this, arguments);
+                })
+                .on('mouseout', tip.hide);
+
+                //svg.selectAll(".tick.major").append("text").style("fill", "red") 
     }
 
     this.update = function(foodNumber) {

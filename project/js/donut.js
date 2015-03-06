@@ -153,8 +153,19 @@ function donut(){
         var indexText = 0;
         g.append("text")
             .attr("class", "text")
-            .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+            .attr("transform", function(d) {
+                var c = arc.centroid(d),
+                    x = c[0],
+                    y = c[1],
+                    // pythagorean theorem for hypotenuse
+                h = Math.sqrt(x*x + y*y);
+                return "translate(" + (x/h * (radius+10)) +  ',' + (y/h * (radius+10)) +  ")"; 
+                })
+            //.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
             .attr("dy", ".35em")
+            .attr("text-anchor", function(d) {
+                    return (d.endAngle + d.startAngle)/2 > Math.PI ? "end" : "start";
+                })
             .text(function(d, i) {
                 //console.log(data[1]["Energi (kJ)(kJ)"]);
                 //var text = data[indexText]["Livsmedelsnamn"];
@@ -168,6 +179,9 @@ function donut(){
                 else
                     return null;
             });
+
+
+
 
     }
 
