@@ -55,15 +55,25 @@
                 <!-- row of columns -->
                 <br><br><br>
                 <div class="row">
-                    <div class="col-xs-6" id="donut" style="height: 70vh"></div>
-                    
+                    <div class="col-xs-4" id="donut" style="height: 70vh"></div>
+
+                        <!-- <div class="col-xs-12" style="height: 35vh; border-style: solid; border-width: 1px; overflow: auto;">
+                            <table id="table" class="table table-striped table-hover">
+                            </table>
+                        </div>
+                        <div class="col-xs-12" style="height: 35vh; border-style: solid; border-width: 1px; overflow: auto;">
+                            <table id="tableRes" class="table table-striped table-hover">
+                            </table>
+                        </div> -->
                     <div class="col-xs-6" id="barChart" style="height: 70vh"></div>   
+                    <div class="col-xs-2" id="table" style="height: 70vh; border-style: solid; border-width: 1px; overflow: auto; padding:0"></div>
                 </div>
                 <div class="row">
 
                     <div class="col-xs-6" id="checkBox" style="height: 10vh"></div>
 
                     <div class"col-xs-6" id="searchBar" style="width:100%; height:100%;"></div>
+
                         <!--SEARCH -->
                         <script type="text/javascript" src="search/scripts/d3.min.js"></script>
                         <script type="text/javascript" src="search/scripts/autocomplete.js"></script>
@@ -128,8 +138,10 @@
 
         <!--modules js-->
         <script src="js/donut.js"></script>
+        <script src="js/table.js"></script>
         <script src="js/checkboxes.js"></script>
         <script src="js/barchart.js"></script>
+
         <script src="js/main.js"></script>
 
        

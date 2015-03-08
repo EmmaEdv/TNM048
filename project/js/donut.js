@@ -76,7 +76,7 @@ function donut(){
                 sum: +summedIntake[f]     
             })
         })*/
-        console.log(idOfDatum);
+      //  console.log(idOfDatum);
         foo = processdata(idOfDatum)
         //draw(foo[0], foo[1]);
         //console.log("innan draw: " + foo[1][3].sum);

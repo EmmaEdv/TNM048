@@ -25,6 +25,7 @@ function barchart() {
                 , "1.2", "2", "400"
                 ,"600", "150", "15", "800", "3.1"
                 ,"280", "2300", "50", "7"];
+    var chosenRDI = manRDI;
     // folat = bra för kvinnor   Niacinekvivalenter()= niacin typ
     var barDiv = $("#barChart");
     var color = d3.scale.category20();
@@ -200,8 +201,8 @@ function barchart() {
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
 
-            // TOMMA BARA FÖR ATT VIS TIP
-            svg.selectAll(".tipbar")
+        // TOMMA BARA FÖR ATT VIS TIP
+        svg.selectAll(".tipbar")
             .data(intake)
             .enter().append("rect")
             .attr("class", "tipbar")
@@ -217,11 +218,16 @@ function barchart() {
             //.on('mouseover', tip.show)
             .on('mouseover', function(d,i) {
                         // tip.show(d, i);
+                        //findCompl(arguments)
                         return tip.show.apply(this, arguments);
                    
                     return tip.hide.apply(this, arguments);
                 })
             .on('mouseout', tip.hide)
+            .on('click', function(d){
+                table1.findCompl(arguments, chosenRDI);
+
+            })
             //.on('mouseout', tip.hide)
 
             /*<svg>
@@ -273,6 +279,10 @@ function barchart() {
                 .on('mouseout', tip.hide);
 
                 //svg.selectAll(".tick.major").append("text").style("fill", "red") 
+    }
+
+    this.getData = function(){
+        return self.data;
     }
 
     this.update = function(foodNumber) {
