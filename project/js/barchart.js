@@ -69,7 +69,7 @@ function barchart() {
 
     svg.call(tip);
 
-    d3.csv("data/livsmedelKomma.csv", function(data) {
+    d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
         var idOfDatum = []
             ,index = 0;
@@ -277,7 +277,7 @@ function barchart() {
 
     this.update = function(foodNumber) {
         processdata(foodNumber);
-        console.log("Uppdaterar barchart");
+        console.log("Uppdaterar barchart: " + foodNumber);
     }
 
 }
