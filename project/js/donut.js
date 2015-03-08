@@ -36,20 +36,20 @@ function donut(){
     .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
     
-    d3.csv("data/livsmedelKomma.csv", function(data) {
+    d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
         var index = 0;
         var dataFoo = [];
         var summedIntake = {};
-        var idOfDatum = [];
+        var idOfDatum = [710];
 
         // DETTA KAN NOG GÖRAS I PROCcESS
-        self.data.forEach(function(c){
+        /*self.data.forEach(function(c){
             if(index < 4){
                 idOfDatum.push(c["Livsmedelsnummer"]);
                 index++;
             }
-        });
+        });*/
 
         // MÅSTE FINNAS ETT BÄTTRE SÄTT!!!!!! För man inte kan += ett var utan värde
         /*typeOfDatum.forEach(function(o){
@@ -100,7 +100,6 @@ function donut(){
                     //console.log("inne")
                     //choosenDatum.push(c);
                     typeOfDatum.forEach(function(t){
-                        //console.log(c[t]);
                         calIntake[t] += +c[t];
                         totalGram += +c[t];
                     })
@@ -118,9 +117,8 @@ function donut(){
                 sum: +calIntake[f]     
             })
         })
-
         draw(summedCalIntake);
-        return [choosenDatum, summedCalIntake]
+        //return [choosenDatum, summedCalIntake]
         
     }
 
@@ -144,11 +142,17 @@ function donut(){
         var indexColor = 0;
         g.append("path")
             .attr("d", arc)
-            .style("fill", function(d) { 
+            .style("fill", function(d) {
                 var sendColor = color(indexColor);
+                if(indexColor == 5) {
+                    indexColor++;
+                    var sendColor = color(indexColor);
+                }
                 indexColor++;
                 return sendColor;
             });
+
+        // TA X,Y POS SEN RITA?
 
         var indexText = 0;
         g.append("text")
@@ -188,6 +192,8 @@ function donut(){
     this.update = function(dataNumb) {
         //console.log(dataNumb);
         //draw(dataFoo, dataNumb);
+        console.log("Uppdaterar donut: " + dataNumb);
+
         processdata(dataNumb);
         // drawAllExcept([123, 12,3 1,2 3123]);
     }

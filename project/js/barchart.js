@@ -70,7 +70,7 @@ function barchart() {
 
     svg.call(tip);
 
-    d3.csv("data/livsmedelKomma.csv", function(data) {
+    d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
         var idOfDatum = []
             ,index = 0;
@@ -225,8 +225,11 @@ function barchart() {
                 })
             .on('mouseout', tip.hide)
             .on('click', function(d){
-                table1.findCompl(arguments, chosenRDI);
-
+                //Lägg till vitamin/mineral till listan
+                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100)
+                    table1.findCompl(arguments, chosenRDI);
+                else
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100%")
             })
             //.on('mouseout', tip.hide)
 
@@ -287,7 +290,7 @@ function barchart() {
 
     this.update = function(foodNumber) {
         processdata(foodNumber);
-        console.log("Uppdaterar barchart");
+        console.log("Uppdaterar barchart: " + foodNumber);
     }
 
 }

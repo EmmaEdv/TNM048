@@ -32,8 +32,9 @@
         <div id="wrap">
 
             <!-- Fixed navbar -->
-            <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+           <!--  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div class="container">
+
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
@@ -41,11 +42,20 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Project Nutrition</a>
+                        <a class="navbar-brand" >Project Nutrition</a>
+
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                          Button with data-target
+                        </button>
+                        <div class="collapse" id="collapseExample">
+                          <div class="well">
+                            ...
+                          </div>
+                        </div>
                         
-                    </div>
+                    </div>   
                 </div>
-            </div>
+            </div> -->
 
             <!-- Begin page content -->
            
@@ -55,24 +65,23 @@
                 <!-- row of columns -->
                 <br><br><br>
                 <div class="row">
-                    <div class="col-xs-4" id="donut" style="height: 70vh"></div>
+                    <div class="col-xs-12" id="searchb"></div>
 
-                        <!-- <div class="col-xs-12" style="height: 35vh; border-style: solid; border-width: 1px; overflow: auto;">
-                            <table id="table" class="table table-striped table-hover">
-                            </table>
-                        </div>
-                        <div class="col-xs-12" style="height: 35vh; border-style: solid; border-width: 1px; overflow: auto;">
-                            <table id="tableRes" class="table table-striped table-hover">
-                            </table>
-                        </div> -->
+                </div>
+                <div class="row">
+                    <div class="col-xs-4" id="donut" style="height: 70vh"></div>
                     <div class="col-xs-6" id="barChart" style="height: 70vh"></div>   
-                    <div class="col-xs-2" id="table" style="height: 70vh; border-style: solid; border-width: 1px; overflow: auto; padding:0"></div>
+                    <div class="col-xs-2" id="table" style="height: 70vh; border-style: solid; border-width: 1px; overflow: auto; padding:0">
+                        <div class="col-xs-12" style="font-weight: bold; text-align: center; padding: 3 height:5vh;" id="headerVitamins"> Valda vitaminer och Mineraler </div>
+                        <div class="col-xs-12" style="height:30vh; overflow:auto" id="listVitamins"> </div>
+                        <div class="col-xs-12" style="font-weight: bold; text-align: center; height:5vh;" id="headerComplement"> Föreslagna livsmedel</div>
+                        <div class="col-xs-12" style="height:30vh; overflow:auto" id="listComplement">Välj vitamin/mineral för att få förslag</div>
+                    </div>
                 </div>
                 <div class="row">
 
                     <div class="col-xs-6" id="checkBox" style="height: 10vh"></div>
-
-                    <div class"col-xs-6" id="searchBar" style="width:100%; height:100%;"></div>
+                    <div class="col-xs-6" id="searchBar" style="height:10vh;"><div></div></div>
 
                         <!--SEARCH -->
                         <script type="text/javascript" src="search/scripts/d3.min.js"></script>
@@ -81,36 +90,7 @@
 
                         <link rel="stylesheet" href="search/fonts/bariol/bariol.css"/>
                         <link rel="stylesheet" href="search/styles/style.css"/>
-                        <script language="JavaScript">
-
-                            //Variable to hold autocomplete options
-                            var keys;
-
-                            //Load US States as options from CSV - but this can also be created dynamically
-                            d3.csv("data/livsmedelKomma.csv",function (csv) {
-                                keys=csv;
-                                start();
-                            });
-
-
-                            //Call back for when user selects an option
-                            function onSelect(d) {
-                                alert(d.State);
-                            }
-
-                            //Setup and render the autocomplete
-                            function start() {
-                                var mc = autocomplete(document.getElementById('searchBar'))
-                                        .keys(keys)
-                                        .dataField("State")
-                                        .placeHolder("Search States - Start typing here")
-                                        .width(960)
-                                        .height(500)
-                                        .onSelected(onSelect)
-                                        .render();
-                            }
-
-                        </script>
+                        
                     
                 </div>
             </div>
@@ -139,12 +119,49 @@
         <!--modules js-->
         <script src="js/donut.js"></script>
         <script src="js/table.js"></script>
+        <script src="js/searchbar.js"></script>
+        <script src="js/lists.js"></script>
         <script src="js/checkboxes.js"></script>
         <script src="js/barchart.js"></script>
 
         <script src="js/main.js"></script>
 
-       
+       <script language="JavaScript">
+
+            //Variable to hold autocomplete options
+            var keys;
+
+            //Load US States as options from CSV - but this can also be created dynamically
+            d3.csv("data/livsmedelKorrekt.csv",function (csv) {
+                keys=csv;
+                start();
+            });
+
+
+            //Call back for when user selects an option
+            function onSelect(d) {
+                list1.livsmedelnummerlist.push(d["Livsmedelsnummer"])
+                console.log(list1.livsmedelnummerlist.length)
+
+                donut1.update(list1.livsmedelnummerlist);
+                bar1.update(list1.livsmedelnummerlist);
+                chBox1.update(list1.livsmedelnummerlist);
+                //alert(d["Livsmedelsnummer"]);
+            }
+
+            //Setup and render the autocomplete
+            function start() {
+                var mc = autocomplete(document.getElementById('searchBar'))
+                        .keys(keys)
+                        .dataField("Livsmedelsnamn")
+                        .placeHolder("Sök efter livsmedel")
+                        .width(900)
+                        .height(500)
+                        .onSelected(onSelect)
+                        .render();
+            }
+
+        </script>
 
     </body>
 </html>

@@ -11,8 +11,42 @@ function checkboxes(){
     var height = chbDiv.height(),
         width = chbDiv.width();
     
-    d3.csv("data/livsmedelKomma.csv", function(data) {
+    d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
+        var index = 0;
+        var dataFoo = [710];
+        var summedIntake = {};
+
+        // // MÅSTE FINNAS ETT BÄTTRE SÄTT!!!!!! För man inte kan += ett var utan värde
+        // typeOfDatum.forEach(function(o){
+        //     summedIntake[o] = 0;
+        // });
+     
+        // self.data.forEach(function(c){
+
+        //     if(index < 4){
+        //         dataFoo.push(c);
+        //         typeOfDatum.forEach(function(o){
+        //             summedIntake[o] += +c[o];
+        //             totalGram += +c[o];
+        //         })
+        //         index++;
+        //     }
+        // });
+
+        // // DETTA GÖRS BARA FÖR ATT PIE VILL HA DET [object, object object]. Vet inte hur man löser med {protein: .....}
+        // typeOfDatum.forEach(function(f){
+        //     summedValueOfDatum.push({
+        //         type: f,
+        //         sum: +summedIntake[f]    
+        //     })
+        // })
+        
+        processdata(dataFoo);
+        //draw(dataFoo, summedValueOfDatum);
+    });
+
+    function processdata(choosenfoodnumber) {
         var index = 0;
         var dataFoo = [];
         var summedIntake = {};
@@ -23,15 +57,16 @@ function checkboxes(){
         });
      
         self.data.forEach(function(c){
-
-            if(index < 4){
-                dataFoo.push(c);
-                typeOfDatum.forEach(function(o){
-                    summedIntake[o] += +c[o];
-                    totalGram += +c[o];
-                })
-                index++;
-            }
+            choosenfoodnumber.forEach(function(cfn) {
+                if(c["Livsmedelsnummer"] == cfn){
+                    dataFoo.push(c);
+                    typeOfDatum.forEach(function(o){
+                        summedIntake[o] += +c[o];
+                        totalGram += +c[o];
+                    })
+                    index++;
+                }
+            })
         });
 
         // DETTA GÖRS BARA FÖR ATT PIE VILL HA DET [object, object object]. Vet inte hur man löser med {protein: .....}
@@ -41,10 +76,9 @@ function checkboxes(){
                 sum: +summedIntake[f]    
             })
         })
-        
 
         draw(dataFoo, summedValueOfDatum);
-    });
+    }
 
     function draw(data, intake) {
 
@@ -75,6 +109,11 @@ function checkboxes(){
                 bar1.update(livsNumb);
             }
         });
+    }
+
+     this.update = function(choosenfoodnumbers) {
+        console.log("checkbox uppdaterat: " + choosenfoodnumbers);
+        processdata(choosenfoodnumbers);
     }
 }
 

@@ -3,15 +3,11 @@ function table(){
     var color = d3.scale.category20();
     var nrOfShownCompl = 5;
 
+    //Hitta livsmedel som kompletterar 
     this.findCompl = function(arguments, chosenRDI){
-        //Ska senare ta in args från checkboxes eller liknande? 
-        //och får då ta forEach och pusha till args!
-        //Kan då i samma forEach beräkna missing som görs i forEach nedan!
-        //console.log(arguments, arguments.length)
         var args = [],
             vitamin = [],
             highest = [],
-            closest = [],
             missing = []; //missing ska innehålla den mängd som fattas för vardera typ som är vald.
         /*Prel-lösning
         //args.push(arguments);
@@ -28,12 +24,10 @@ function table(){
         vitamin.forEach(function(d,i){
             missing.push(chosenRDI[arguments[1]] - d.sum);
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
-            closest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
-            closest[i][d.type] = 0;
         });
 
-        //Step är hur stort spann vi har på intervallet från hur mycket som saknas.
+        //Step är hur stort spann vi har på intervallet från hur mycket som saknas. (Nu i enheter, kanske bättre med %?)
         var step = 5;
         //I complements spar vi de livsmedel som man kan äta som komplement
         var complements = [];
@@ -56,10 +50,6 @@ function table(){
                 //Om dess innehåll är inom intervallen:
                 if(temp[d.type] >= ((missing[i]-step) < 0 ? 0 : (missing[i]-step)) && temp[d.type] <= (missing[i]+step)){ 
                     //Spara den med det bästa intervallet. :)
-                /*    if(Math.abs(missing[i]-c[t.type]) < Math.abs(missing[i]-closest[i].value) || (missing[i]-temp[t.type]) == 0){
-                        console.log("diff:", Math.abs(missing[i]-temp[t]))
-                        closest[i] = temp;
-                    }   */
                     //Spara differensen mellan livsmedlets innehåll och vad som saknas.
                     temp.compType = d.type;
                     //Samma livsmedel bör bara adderas en gång
@@ -85,53 +75,73 @@ function table(){
                 percent = 0;
             /*var diff = [],
                 percent = [];*/
-            vitamin.forEach(function(v,l){ 
-                diff += Math.abs(missing[l]-n[v.type]); 
-                percent = Math.round(100 * (n[v.type]/chosenRDI[arguments[1]]));
-                //diff.push(Math.abs(missing[l]-n[v.type]));
-                //percent.push((n[v.type] + d[v.type])/chosenRDI[i]);
+            vitamin.forEach(function(d,i){ 
+                diff += Math.abs(missing[i]-n[d.type]); 
+                percent = Math.round(100 * (n[d.type]/chosenRDI[arguments[1]]));
+                //diff.push(Math.abs(missing[i]-n[d.type]));
+                //percent.push((n[d.type] + d[d.type])/chosenRDI[i]);
             }); 
             n.diff = diff;
             n.percent = percent;
         });
         
         //SORTERA alla funna komplement på differensen, lägst differens är bäst (a.diff-b.diff)
-        complements.sort(function(a, b){ return b.percent-a.percent; });
+        complements.sort(function(a, b){ 
+            return b.percent-a.percent; 
+        });
 
-    //console.log("Alla complements", complements)
-        //Räkna ut hur mycket av detta man behöver äta för att nå upp till missing..
-        if(complements[0][vitamin[0].type] > 0){
-            var amount = Math.ceil(complements[0].diff/complements[0][vitamin[0].type]);
-            console.log("För att öka " + complements[0].compType + " med " + complements[0].percent + "% kan du äta/dricka " + complements[0].Livsmedelsnamn + "'")
-        } else {
-            console.log("För att öka " + complements[0].compType + " med " + complements[0].percent + "% kan du äta/dricka 1 '" + complements[0].Livsmedelsnamn + "'")
-        }
+        //Vikta:
 
-        //Listan
-        var div = "<div class='col-xs-1' style='padding:0;'> "+
+        //LISTAN
+        //Färgad fyrkant:
+        var cube = "<div class='col-xs-1' style='padding:0;'> "+
                     "<div style='background-color:" + color(arguments[1]) + "; width: 10px; height: 10px;'> "+
                     "</div> "+
                 "</div>";
-        var text = "<ul style='padding:0px 0px 0px 3px;'> "+
-                        "<li style='list-style-type: none;'> "+div+
+        var vitText = "<ul style='padding:0px 0px 0px 3px;'> " +
+                        "<li style='list-style-type: none;'> " + cube +
                             "<div class='col-xs-11' style='padding:0'> "+ 
                                 complements[0].compType + 
                             "</div> "+
-                        " </li>";
+                        " </li> </ul>";
+
+        document.getElementById("listVitamins").innerHTML += vitText;
+        
+        var compText = ""; 
+        var popoverContent = "";
+        //Lista med varje komplement + popoverruta
         complements.forEach(function(b,i){
-           // console.log(complements[i])
-            if(i<nrOfShownCompl)
-            text += "<ul>"+
-                        "<li id="+complements[i].Livsmedelsnummer+"> "+
-                            "100 g "+ complements[i].Livsmedelsnamn + "<br> ger dig <b>" + complements[i].percent + "%</b> mer av <b>" + complements[i].compType + "</b>"+
-                        "</li>"+
-                    "</ul>";
+            if(i<nrOfShownCompl){
+                popoverContent =  complements[i].compType + " " + complements[i].percent;
+                compText += "<ul>"+
+                                "<a style='color: black;' class='popoverData' class='btn' href='#' data-content='"+
+                                popoverContent + "' rel='popover' data-placement='bottom' data-original-title='" + 
+                                complements[i].Livsmedelsnamn + "' data-trigger='hover'>"+
+                                "<li id="+complements[i].Livsmedelsnummer+">"+
+                                complements[i].Livsmedelsnamn +
+                                 //   "100 g "+ complements[i].Livsmedelsnamn + "<br> ger dig <b>" + complements[i].percent + "%</b> mer av <b>" + complements[i].compType + "</b>"+
+                                "</li> </a>"+
+                            "</ul>";
+            }
         });
-        text += "<ul>";
-        document.getElementById("table").innerHTML += text;
-    setClick();
+        
+        document.getElementById("listComplement").innerHTML += compText;
+        
+        //var popOver = "<a id='popoverOption' class='btn' href='#' data-content="+complements[0].Livsmedelsnummer+" rel='popover' data-placement='bottom' data-original-title=" + complements[0].Livsmedelsnamn + "data-trigger='hover'>Popup with option trigger</a>"
+
+        setHover();
+        setClick();
         //document.getElementById("table").innerHTML += res;
         //Vore nice att kunna autoadda och se hur stapeldiagrammet skulle se ut med det bästa livsmedlet.. :)
+    }
+
+    function setHover(){
+        //Remove from this list & add to checkboxes... 
+        $('#table li').hover(function(){
+            var id = $(this).attr("id");
+            console.log(id);
+            $('.popoverData').popover(console.log("vetefan"));            
+        });
     }
 
     function setClick(){
