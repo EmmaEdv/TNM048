@@ -119,9 +119,9 @@ function table(){
         console.log("FÄRGERNA BLIR FEL :( den tar fel id...");
         var colorOfRDI = rdiColor[1].color;
         rdiColor.forEach(function(d) {
-                            console.log(d.type + " LIKA " + intearguments[0].type);
+                            //console.log(d.type + " LIKA " + intearguments[0].type);
                             if(d.type == intearguments[0].type) {
-                                console.log('YÄÄÄ');
+                                //console.log('YÄÄÄ');
                                 colorOfRDI = d.color;
                             }
                         })
