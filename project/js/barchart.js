@@ -204,14 +204,22 @@ function barchart() {
             .on('mouseout', tip.hide)
             .on('click', function(d){
                 //Lägg till vitamin/mineral till listan
-                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100){
+                var vitExists = false;
+                var vitList = table1.getVitamin();
+                //Man ska bara kunna lägga till vitaminen en gång
+                vitList.forEach(function(vl){
+                    if(d.type == vl)
+                        vitExists = true;
+                })
+
+                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
                     table1.findCompl(arguments, chosenRDI);
-                    console.log("Lägger till", arguments[0])
+                    console.log("Lägger till", arguments[0].type)
                 }
-                else {
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% " + arguments[1])
-                }
+                else
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
+                
             })
 
         // TOMMA BARA FÖR ATT VIS TIP
@@ -234,7 +242,7 @@ function barchart() {
                         //findCompl(arguments)
                         return tip.show.apply(this, arguments);
                    
-                    return tip.hide.apply(this, arguments);
+                    //return tip.hide.apply(this, arguments);
                 })
             .on('mouseout', tip.hide)
             .on('click', function(d){
@@ -249,7 +257,7 @@ function barchart() {
 
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
-                    table1.findCompl(d, chosenRDI);
+                    table1.findCompl(arguments, chosenRDI);
                     console.log("Lägger till", arguments[0].type)
                 }
                 else
