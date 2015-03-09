@@ -25,7 +25,9 @@ function barchart() {
                 , "1.2", "2", "400"
                 ,"600", "150", "15", "800", "3.1"
                 ,"280", "2300", "50", "7"];
+    
     var chosenRDI = manRDI;
+    
     // folat = bra för kvinnor   Niacinekvivalenter()= niacin typ
     var barDiv = $("#barChart");
     var color = d3.scale.category20();
@@ -122,7 +124,7 @@ function barchart() {
     function procent(d, i) {
         var procent = 0;
         if(d.sum != 0)
-            procent = (d.sum/manRDI[i]);
+            procent = (d.sum/chosenRDI[i]);
         else
             procent = 0
 
@@ -200,6 +202,17 @@ function barchart() {
             })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
+            .on('click', function(d){
+                //Lägg till vitamin/mineral till listan
+                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100){
+                    table1.setVitamin(nameOfRDI[arguments[1]]);
+                    table1.findCompl(arguments, chosenRDI);
+                    console.log("Lägger till", arguments[0].type)
+                }
+                else {
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% " + arguments[1])
+                }
+            })
 
         // TOMMA BARA FÖR ATT VIS TIP
         svg.selectAll(".tipbar")
@@ -226,10 +239,21 @@ function barchart() {
             .on('mouseout', tip.hide)
             .on('click', function(d){
                 //Lägg till vitamin/mineral till listan
-                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100)
+                var vitExists = false;
+                var vitList = table1.getVitamin();
+                //Man ska bara kunna lägga till vitaminen en gång
+                vitList.forEach(function(vl){
+                    if(d.type == vl)
+                        vitExists = true;
+                })
+
+                if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
+                    table1.setVitamin(nameOfRDI[arguments[1]]);
                     table1.findCompl(arguments, chosenRDI);
+                    console.log("Lägger till", arguments[0].type)
+                }
                 else
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100%")
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
             })
             //.on('mouseout', tip.hide)
 

@@ -99,6 +99,7 @@ function checkboxes(){
                 console.log("FLER " + livsNumb);
                 donut1.update(livsNumb);
                 bar1.update(livsNumb);
+                table1.update(livsNumb);
             }else{
                 var index = livsNumb.indexOf($this.val());
                 if (index > -1) {
@@ -107,6 +108,7 @@ function checkboxes(){
                 console.log("FÄRRE " + livsNumb);
                 donut1.update(livsNumb);
                 bar1.update(livsNumb);
+                table1.update(livsNumb);
             }
         });
     }

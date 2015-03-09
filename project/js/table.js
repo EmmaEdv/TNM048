@@ -2,13 +2,18 @@ function table(){
 
     var color = d3.scale.category20();
     var nrOfShownCompl = 5;
+    var theChosenRDI,
+        vitaminList = [],
+        complementsList = [],
+        complements = [],
+        missing = [];
 
     //Hitta livsmedel som kompletterar 
     this.findCompl = function(arguments, chosenRDI){
+        theChosenRDI = chosenRDI;
         var args = [],
             vitamin = [],
-            highest = [],
-            missing = []; //missing ska innehålla den mängd som fattas för vardera typ som är vald.
+            highest = []; //missing ska innehålla den mängd som fattas för vardera typ som är vald.
         /*Prel-lösning
         //args.push(arguments);
         //args.push([{type: "Zink(mg)", sum: 0}, 19, 0])
@@ -30,7 +35,7 @@ function table(){
         //Step är hur stort spann vi har på intervallet från hur mycket som saknas. (Nu i enheter, kanske bättre med %?)
         var step = 5;
         //I complements spar vi de livsmedel som man kan äta som komplement
-        var complements = [];
+        
 
         var theData = bar1.getData();
         //För vardera livsmedel kollar vi hur deras vitaminer står sig mot intervallet.
@@ -94,34 +99,50 @@ function table(){
 
         //LISTAN
         //Färgad fyrkant:
+        console.log("FÄRGERNA BLIR FEL :( den tar fel id...");
+
         var cube = "<div class='col-xs-1' style='padding:0;'> "+
                     "<div style='background-color:" + color(arguments[1]) + "; width: 10px; height: 10px;'> "+
                     "</div> "+
                 "</div>";
+
         var vitText = "<ul style='padding:0px 0px 0px 3px;'> " +
                         "<li style='list-style-type: none;'> " + cube +
                             "<div class='col-xs-11' style='padding:0'> "+ 
-                                complements[0].compType + 
+                                arguments[0].type + 
                             "</div> "+
-                        " </li> </ul>";
+                        " </li> </ul>";         
 
         document.getElementById("listVitamins").innerHTML += vitText;
         
         var compText = ""; 
+        
         var popoverContent = "";
+
         //Lista med varje komplement + popoverruta
         complements.forEach(function(b,i){
+            var compExists = false;
             if(i<nrOfShownCompl){
-                popoverContent =  complements[i].compType + " " + complements[i].percent;
-                compText += "<ul>"+
-                                "<a style='color: black;' class='popoverData' class='btn' href='#' data-content='"+
-                                popoverContent + "' rel='popover' data-placement='bottom' data-original-title='" + 
-                                complements[i].Livsmedelsnamn + "' data-trigger='hover'>"+
-                                "<li id="+complements[i].Livsmedelsnummer+">"+
+                //Livsmedlet ska bara vara med en gång
+                complementsList.forEach(function(cl){
+                    if(complements[i].Livsmedelsnummer == cl){
+                        compExists = true;
+                    }
+                });
+
+                if(!compExists){
+                    complementsList.push(complements[i].Livsmedelsnummer);
+                    popoverContent =  calculateContent(complements[i].Livsmedelsnummer, i);//complements[i].compType + " " + complements[i].percent;
+/*http://jsfiddle.net/9P64a/*/
+                    compText += "<ul id="+complements[i].Livsmedelsnummer+">"+
+                                "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
+                                "data-original-title='"+ complements[i].Livsmedelsnamn +"' data-trigger='hover'>"+
+                                "<li>"+
                                 complements[i].Livsmedelsnamn +
                                  //   "100 g "+ complements[i].Livsmedelsnamn + "<br> ger dig <b>" + complements[i].percent + "%</b> mer av <b>" + complements[i].compType + "</b>"+
                                 "</li> </a>"+
                             "</ul>";
+                }
             }
         });
         
@@ -131,25 +152,91 @@ function table(){
 
         setHover();
         setClick();
-        //document.getElementById("table").innerHTML += res;
-        //Vore nice att kunna autoadda och se hur stapeldiagrammet skulle se ut med det bästa livsmedlet.. :)
+    }
+
+    function calculateContent(id){
+        var nr = "";
+        console.log(complementsList, "awoolistan")
+        complementsList.forEach(function(cl,n){
+            if(id == cl){
+                console.log(id, cl)
+                nr = n;
+            }
+            else
+                console.log("Det var ju mindre bra..")
+        })
+        //I OCH MED SORTERINGEN STÄMMER INTE NR... KIKA PÅ DET EMMA
+        console.log(nr, complements[nr], id, vitaminList);
+        var popoverContent = "",
+            perc = "";
+
+        vitaminList.forEach(function(vl, i){
+            perc = Math.round(100 * (complements[nr][vl]/theChosenRDI[i]));
+            console.log("vl",vl, "nr", nr, "perc", perc, complements[nr].percent)
+            popoverContent += "" + vl + " ökar med " + perc + "%, \n";
+        })
+
+        return popoverContent;
     }
 
     function setHover(){
         //Remove from this list & add to checkboxes... 
-        $('#table li').hover(function(){
+        $('#table ul').hover(function(){
             var id = $(this).attr("id");
-            console.log(id);
-            $('.popoverData').popover(console.log("vetefan"));            
+            console.log(id)
+            var popoverContent = calculateContent(id);
+            /*
+            console.log(complements[nr].Livsmedelsnamn;, id, vitaminList);
+            var popoverContent = "",
+                perc = "";
+            console.log("popoverContent", popoverContent, "perc", perc)
+
+            vitaminList.forEach(function(vl, i){
+                perc = Math.round(100 * (complements[nr][vl]/theChosenRDI[i]));
+                console.log("vl",vl, "nr", nr, "perc", perc, complements[nr].percent)
+                popoverContent += "" + vl + " ökar med " + perc + "%, \n";
+            })*/
+            //TODO: TROR INTE ATT DETTA STÄMMER HELT & HÅLLET... 
+            $('.popoverData').popover({content: popoverContent});
+            //$('.popoverData').popover({title: complements[nr].Livsmedelsnamn, content: popoverContent});
         });
     }
 
     function setClick(){
         //Remove from this list & add to checkboxes... 
-        $('#table li').click(function(){
+        $('#table ul').click(function(){
             var id = $(this).attr("id");
-            console.log(id);
-            
+            //console.log(id);
+            document.getElementById(idNr).remove(this.selectedIndex);
+            console.log("TODO: LÄGG TILL LIVSMEDEL MED NR: " + id[0] + " TILL LISTAN MED LIVSMEDEL & UPPDATERA GRAFER.");
+            //LÄGG TILL LIVSMEDLET MED DETTA ID I LISTAN OCH UPPDATERA BARCHART & DONUT OSV
+
         });
+    }    
+
+    this.setVitamin = function(vitamin){
+        console.log("pushing ", vitamin);
+        vitaminList.push(vitamin);
+    }
+
+    this.getVitamin = function(){
+       // console.log("getting vitaminlist");
+        return vitaminList;
+    }
+
+    function getChosenRDI(){
+        return theChosenRDI;
+    }
+
+    function setChosenRDI(chosenRDI){
+        theChosenRDI = chosenRDI;
+    }
+
+    this.update = function(dataNumb) {
+        //console.log(dataNumb);
+        //draw(dataFoo, dataNumb);
+        console.log("Uppdaterar table: " + dataNumb);
+        document.getElementById("listVitamins").innerHTML = "";
+        document.getElementById("listComplement").innerHTML = "";
     }
 }
