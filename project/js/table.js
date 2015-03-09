@@ -8,26 +8,43 @@ function table(){
         complements = [],
         missing = [];
 
+    var nameOfRDI = ["Vitamin A()","Vitamin D(µg)","Vitamin E(mg)"
+                    ,"Vitamin K(µg)" ,"Tiamin(mg)","Riboflavin(mg)","Vitamin C(mg)","Niacin(mg)"
+                    ,"Vitamin B6(mg)","Vitamin B12(µg)","Folat(µg)"
+                    ,"Fosfor(mg)","Jod(µg)","Järn(mg)","Kalcium(mg)","Kalium(mg)"
+                    ,"Magnesium(mg)","Natrium(mg)","Selen(µg)","Zink(mg)"];
+    var rdiColor = [];
+    nameOfRDI.forEach(function(f,i){
+            console.log("FÄRGER I : " + color(i))
+            rdiColor.push({ 
+                type: f,
+                color: color(i)    
+            })
+        })
+
     //Hitta livsmedel som kompletterar 
-    this.findCompl = function(arguments, chosenRDI){
+    this.findCompl = function(intearguments, chosenRDI){
         theChosenRDI = chosenRDI;
         var args = [],
             vitamin = [],
             highest = []; //missing ska innehålla den mängd som fattas för vardera typ som är vald.
         /*Prel-lösning
-        //args.push(arguments);
+        //args.push(intearguments);
         //args.push([{type: "Zink(mg)", sum: 0}, 19, 0])
         //var vitamin = [args[0][0], args[1][0]];
         */
-    args.push(arguments);
+        console.log(intearguments[0]);
+    args.push(intearguments[0]);
         //Just nu skickas ju endast in ett argument.....
-        args.forEach(function(d,i){
-            vitamin.push(arguments[i][0]);
-        })
+        /*args.forEach(function(d,i){
+            vitamin.push(intearguments[i][0]);
+        })*/
+
+        vitamin.push(intearguments[0])
 
         //Beräkna för vardera type hur stor mängd som saknas från RDI
         vitamin.forEach(function(d,i){
-            missing.push(chosenRDI[arguments[1]] - d.sum);
+            missing.push(chosenRDI[intearguments[1]] - d.sum);
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
         });
@@ -82,7 +99,7 @@ function table(){
                 percent = [];*/
             vitamin.forEach(function(d,i){ 
                 diff += Math.abs(missing[i]-n[d.type]); 
-                percent = Math.round(100 * (n[d.type]/chosenRDI[arguments[1]]));
+                percent = Math.round(100 * (n[d.type]/chosenRDI[intearguments[1]]));
                 //diff.push(Math.abs(missing[i]-n[d.type]));
                 //percent.push((n[d.type] + d[d.type])/chosenRDI[i]);
             }); 
@@ -100,16 +117,25 @@ function table(){
         //LISTAN
         //Färgad fyrkant:
         console.log("FÄRGERNA BLIR FEL :( den tar fel id...");
+        var colorOfRDI = rdiColor[1].color;
+        rdiColor.forEach(function(d) {
+                            console.log(d.type + " LIKA " + intearguments[0].type);
+                            if(d.type == intearguments[0].type) {
+                                console.log('YÄÄÄ');
+                                colorOfRDI = d.color;
+                            }
+                        })
+        console.log("FÄRG: " + colorOfRDI)
 
         var cube = "<div class='col-xs-1' style='padding:0;'> "+
-                    "<div style='background-color:" + color(arguments[1]) + "; width: 10px; height: 10px;'> "+
+                    "<div style='background-color:" + colorOfRDI + "; width: 10px; height: 10px;'> "+
                     "</div> "+
                 "</div>";
 
         var vitText = "<ul style='padding:0px 0px 0px 3px;'> " +
                         "<li style='list-style-type: none;'> " + cube +
                             "<div class='col-xs-11' style='padding:0'> "+ 
-                                arguments[0].type + 
+                                intearguments[0].type + 
                             "</div> "+
                         " </li> </ul>";         
 

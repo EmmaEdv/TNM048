@@ -207,7 +207,7 @@ function barchart() {
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
                     table1.findCompl(arguments, chosenRDI);
-                    console.log("Lägger till", arguments[0].type)
+                    console.log("Lägger till", arguments[0])
                 }
                 else {
                     console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% " + arguments[1])
@@ -249,7 +249,7 @@ function barchart() {
 
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
-                    table1.findCompl(arguments, chosenRDI);
+                    table1.findCompl(d, chosenRDI);
                     console.log("Lägger till", arguments[0].type)
                 }
                 else

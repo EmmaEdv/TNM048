@@ -35,6 +35,15 @@ function donut(){
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")");
 
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d, i) {
+            var procentRDI = Math.round(100 * procent(d,i))
+            //return "<strong>" + d.type + ":</strong> <span style='color:black'>" + procentRDI + "% av RDI</span>";
+            return "<strong>" + d.type + ":</strong> <span style='color:" + color(i) + "'>" + procentRDI + "% av RDI</span>";
+        });
+
     
     d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
@@ -151,6 +160,8 @@ function donut(){
                 indexColor++;
                 return sendColor;
             });
+            /*.on('mouseover', function(d,i) { console.log(d)})
+            .on('mouseout', tip);*/
 
         // TA X,Y POS SEN RITA?
 

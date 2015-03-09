@@ -1,16 +1,8 @@
-svg {
-    font: 10px sans-serif;
-}
-
 body {
   font: 10px sans-serif;
 }
 
-.arc path {
-  stroke: #fff;
-}
-
-.text {
+.check {
     text-anchor: middle;
     font: 13px sans-serif;
     color: #8a89a6;

@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/colorbrewer.css">
         <link rel="stylesheet" href="css/barchart.css">
+        <link rel="stylesheet" href="css/checkboxes.css">
 
         <!--modules css-->
         <link rel="stylesheet" href="css/donut.css">
@@ -152,6 +153,7 @@
 
             //Setup and render the autocomplete
             function start() {
+                console.log(document.getElementById('searchBar'));
                 var mc = autocomplete(document.getElementById('searchBar'))
                         .keys(keys)
                         .dataField("Livsmedelsnamn")

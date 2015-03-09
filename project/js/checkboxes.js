@@ -86,7 +86,7 @@ function checkboxes(){
         var foo = '';
         var livsNumb = [];
         data.forEach( function(d) {
-            foo += "<label><input type='checkbox' value='" 
+            foo += "<label class='check'><input type='checkbox' value='" 
                     + d["Livsmedelsnummer"] + "' checked/>" + d["Livsmedelsnamn"] + "<br><label>";
             livsNumb.push(d["Livsmedelsnummer"]);
         });
