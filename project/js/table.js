@@ -195,9 +195,16 @@ function table(){
         console.log(nr, complements[nr], id, vitaminList);
         var popoverContent = "",
             perc = "";
+        var index = -1;
 
         vitaminList.forEach(function(vl, i){
-            perc = Math.round(100 * (complements[nr][vl]/theChosenRDI[i]));
+            nameOfRDI.forEach(function(n, j){
+                if(n==vl){
+                    index = j;
+                }
+            });
+            
+            perc = Math.round(100 * (complements[nr][vl]/theChosenRDI[index]));
             console.log("vl",vl, "nr", nr, "perc", perc, complements[nr].percent)
             popoverContent += "" + vl + " ökar med " + perc + "%, \n";
         })
