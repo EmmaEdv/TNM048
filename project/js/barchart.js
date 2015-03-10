@@ -218,7 +218,7 @@ function barchart() {
                     //console.log("Lägger till", arguments[0].type)
                 }
                 else
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda")
                 
             })
 
@@ -261,7 +261,7 @@ function barchart() {
                     //console.log("Lägger till", arguments[0].type)
                 }
                 else
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda")
             })
             //.on('mouseout', tip.hide)
 

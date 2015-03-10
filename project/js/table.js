@@ -188,10 +188,10 @@ function table(){
                     hej += e + " " + d[e] + ": " + percent + "% ";
                 });
                 hej += " weighted score: " + d.weight;
+                //hej += <br>+"-------------------------------------------------------";
                 console.log(hej);
                 compindex++;
             }
-            console.log("-------------------------------------------------------");
            
         });
 console.log("");
@@ -259,8 +259,8 @@ console.log("");
         document.getElementById("listComplement").innerHTML += compText;
         
         //var popOver = "<a id='popoverOption' class='btn' href='#' data-content="+complements[0].Livsmedelsnummer+" rel='popover' data-placement='bottom' data-original-title=" + complements[0].Livsmedelsnamn + "data-trigger='hover'>Popup with option trigger</a>"
-        setHover();
-        setClick();
+        //setHover();
+        //setClick();
     }
 
     function calculateContent(id){
