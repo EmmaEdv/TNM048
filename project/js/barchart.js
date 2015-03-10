@@ -17,13 +17,13 @@ function barchart() {
     var manRDI = ["900", "10", "10"
                 ,"80", "1.4", "1.6", "75", "19"
                 , "1.6", "2", "300"
-                ,"600", "150", "9", "800", "3.5"
+                ,"600", "150", "9", "800", "3500"
                 ,"350", "2300", "60", "9"];
     // Dessa värden är för menstration och planerar bli gravid annars är folat = 300 och järn=9
     var womRDI = ["700", "10", "8"
                 ,"65", "1.1", "1.2", "75", "14"
                 , "1.2", "2", "400"
-                ,"600", "150", "15", "800", "3.1"
+                ,"600", "150", "15", "800", "3100"
                 ,"280", "2300", "50", "7"];
     
     var chosenRDI = manRDI;
@@ -74,15 +74,15 @@ function barchart() {
 
     d3.csv("data/livsmedelKorrekt.csv", function(data) {
         self.data = data;
-        var idOfDatum = []
+        var idOfDatum = [710]
             ,index = 0;
 
-        self.data.forEach(function(c){
+        /*self.data.forEach(function(c){
             if(index < 4){
                 idOfDatum.push(c["Livsmedelsnummer"]);
                 index++;
             }
-        });
+        });*/
         processdata(idOfDatum);
     });
 
@@ -215,7 +215,7 @@ function barchart() {
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
                     table1.findCompl(arguments, chosenRDI);
-                    console.log("Lägger till", arguments[0].type)
+                    //console.log("Lägger till", arguments[0].type)
                 }
                 else
                     console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
@@ -258,7 +258,7 @@ function barchart() {
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
                     table1.setVitamin(nameOfRDI[arguments[1]]);
                     table1.findCompl(arguments, chosenRDI);
-                    console.log("Lägger till", arguments[0].type)
+                    //console.log("Lägger till", arguments[0].type)
                 }
                 else
                     console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda" + arguments[1] + " " + color(arguments[1]))
@@ -322,7 +322,7 @@ function barchart() {
 
     this.update = function(foodNumber) {
         processdata(foodNumber);
-        console.log("Uppdaterar barchart: " + foodNumber);
+        //console.log("Uppdaterar barchart: " + foodNumber);
     }
 
 }

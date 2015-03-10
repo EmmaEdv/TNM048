@@ -203,7 +203,7 @@ function donut(){
     this.update = function(dataNumb) {
         //console.log(dataNumb);
         //draw(dataFoo, dataNumb);
-        console.log("Uppdaterar donut: " + dataNumb);
+       // console.log("Uppdaterar donut: " + dataNumb);
 
         processdata(dataNumb);
         // drawAllExcept([123, 12,3 1,2 3123]);

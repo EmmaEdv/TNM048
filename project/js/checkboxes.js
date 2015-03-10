@@ -114,7 +114,7 @@ function checkboxes(){
     }
 
      this.update = function(choosenfoodnumbers) {
-        console.log("checkbox uppdaterat: " + choosenfoodnumbers);
+       // console.log("checkbox uppdaterat: " + choosenfoodnumbers);
         processdata(choosenfoodnumbers);
     }
 }

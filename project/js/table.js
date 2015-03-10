@@ -42,13 +42,11 @@ function table(){
                 if(pos == d.type)
                     index = j;
             });
-            console.log("JA:" + Math.round(100 * ((d.sum)/theChosenRDI[index])));
             missing.push(100 - Math.round(100 * ((d.sum)/theChosenRDI[index])))
            // missing.push(percent(intearguments[0].type, (intearguments[0].sum-d.sum)));
 //            missing.push(chosenRDI[intearguments[1]] - d.sum);
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
-            console.log("procent: " + missing[i])
         });
 //console.log("vitaminlängd", vitaminList.length)
         nrOfShownCompl = 5*vitaminList.length;
@@ -62,7 +60,7 @@ function table(){
         var theData = bar1.getData();
         //För vardera livsmedel kollar vi hur deras vitaminer står sig mot intervallet.
         while(lessThanFive){
-            theData.forEach(function(c){
+            theData.forEach(function(c, h){
                 //sortera sen på de valda kategorierna
                 //Eller kolla om den inlagda redan finns i arrayen?
                 //console.log(c[type], missing-interval, missing+interval)
@@ -78,7 +76,6 @@ function table(){
                     });
 
                     var temp = c;
-                    console.log("hej " + missing[vitindex] , " ", vitindex)
                     //console.log("två",d.type, temp[d.type])
                     var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[robert]));
                     
@@ -114,13 +111,11 @@ function table(){
 
                     if(dataObjPercent >= min && dataObjPercent <= max){
                         if(complements.length < nrOfShownCompl){
-                            console.log("BRA")
                             temp.compType = d.type
                             complements.push(temp);
+                            theData.splice(h,1);
                         }
                         else{
-                            console.log(nrOfShownCompl)
-                            console.log("full")
                             lessThanFive = false;
                         }
                     }
@@ -130,7 +125,6 @@ function table(){
             step += 1;
         }
 
-console.log(complements)
         //Adderar differenserna för att sedan sortera på det för att få fram bästa alternativ
         //Just nu visas ju bara en kategori åt gången.. heehehe
         complements.forEach(function(n){
@@ -194,14 +188,15 @@ console.log(complements)
                     hej += e + " " + d[e] + ": " + percent + "% ";
                 });
                 hej += " weighted score: " + d.weight;
-
                 console.log(hej);
                 compindex++;
             }
-
+            console.log("-------------------------------------------------------");
            
         });
-
+console.log("");
+console.log("=======================================================");
+console.log("");
         //Vikta:
 
         //LISTAN
@@ -358,7 +353,8 @@ console.log(complements)
     this.update = function(dataNumb) {
         //console.log(dataNumb);
         //draw(dataFoo, dataNumb);
-        console.log("Uppdaterar table: " + dataNumb);
+       // console.log("Uppdaterar table: " + dataNumb);
+        vitaminList = [];
         document.getElementById("listVitamins").innerHTML = "";
         document.getElementById("listComplement").innerHTML = "";
     }
