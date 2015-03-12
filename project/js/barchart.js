@@ -218,7 +218,7 @@ function barchart() {
                     //console.log("Lägger till", arguments[0].type)
                 }
                 else
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda")
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% och ej är tillagda")
                 
             })
 
@@ -251,8 +251,11 @@ function barchart() {
                 var vitList = table1.getVitamin();
                 //Man ska bara kunna lägga till vitaminen en gång
                 vitList.forEach(function(vl){
-                    if(d.type == vl)
+                    //console.log("hej")
+                    if(d.type == vl){
                         vitExists = true;
+                        //console.log("bajs")
+                    }
                 })
 
                 if(Math.round(100*(d.sum/chosenRDI[arguments[1]])) < 100 && !vitExists){
@@ -261,7 +264,7 @@ function barchart() {
                     //console.log("Lägger till", arguments[0].type)
                 }
                 else
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda")
+                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% och ej är tillagda")
             })
             //.on('mouseout', tip.hide)
 
