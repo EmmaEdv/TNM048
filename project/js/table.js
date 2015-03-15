@@ -39,21 +39,13 @@ function table(){
                     index = j;
             });
             missing.push(100 - Math.round(100 * ((d.sum)/theChosenRDI[index])))
-<<<<<<< HEAD
-=======
-
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
         });
 
         nrOfShownCompl = 5*vitaminList.length;
 
-<<<<<<< HEAD
         //Step är hur stort spann vi har på intervallet från hur mycket som saknas.
-=======
-        //Step är hur stort spann vi har på intervallet från hur mycket som saknas. 
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
         var step = 1;
         var lessThanFive = true;
         var whichRDI = -1;
@@ -63,37 +55,22 @@ function table(){
         //För vardera livsmedel kollar vi hur deras vitaminer står sig mot intervallet.
         while(lessThanFive){
             theData.forEach(function(c, h){
-<<<<<<< HEAD
-                //sortera sen på de valda kategorierna
-                //Eller kolla om den inlagda redan finns i arrayen?
-                //För varje vitamin
-                var vitindex = 0;
-                vitamin.forEach(function(d, i){   
-                    //sparar en temp för att inte spara över datan, är det nödvändigt?
-=======
                 
                 //För varje vitamin
                 var vitindex = 0;
                 vitamin.forEach(function(d, i){   
 
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
                     nameOfRDI.forEach(function(pos, j){
                         if(pos == d.type)
                             whichRDI = j;
                     });
                     //sparar data item i en temporär då vi vill lägga till attrubut
                     var temp = c;
-<<<<<<< HEAD
-                    var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[robert]));
-                    var max = missing[i] + step,
-                        min = missing[i] - step;
-=======
-                    
+
                     var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[whichRDI]));
                     
                     var max = missing[i] + step;
                     var min = missing[i] - step;
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
 
                     if(dataObjPercent >= min && dataObjPercent <= max){
                         if(complements.length < nrOfShownCompl){
@@ -115,18 +92,10 @@ function table(){
         complements.forEach(function(n){
             var diff = 0,
                 percent = 0;
-<<<<<<< HEAD
 
             vitamin.forEach(function(d,i){ 
                 diff += Math.abs(missing[i]-n[d.type]); 
                 percent = Math.round(100 * (n[d.type]/theChosenRDI[intearguments[1]]));
-=======
-            var temp = [];
-            vitamin.forEach(function(d,i){ 
-                diff += Math.abs(missing[i]-n[d.type]); 
-                percent = Math.round(100 * (n[d.type]/theChosenRDI[intearguments[1]]));
-                temp.push({vit: d.type, per: percent});
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
             }); 
             n.diff = diff;
             n.percent = percent;
@@ -172,28 +141,19 @@ function table(){
 
                     output += e + " " + d[e] + ": " + percent + "% ";
                 });
-<<<<<<< HEAD
-                hej += " weighted score: " + d.weight;
-                console.log(hej);
-=======
+
                 output += " Score: " + d.weight;
                 
                 console.log(output);
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
+                
                 compindex++;
             }
            
         });
-<<<<<<< HEAD
-    console.log("");
-    console.log("=======================================================");
-    console.log("");
-        //Vikta:
-=======
+
 console.log("");
 console.log("=======================================================");
 console.log("");
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
 
         //LISTAN
         //Färgad fyrkant:
@@ -222,11 +182,11 @@ console.log("");
         
         var popoverContent = "";
         
-        var hej = vitaminList.length;
+        var vitaminLength = vitaminList.length;
         //Lista med varje komplement + popoverruta
         complements.forEach(function(b,i){
             //Töm textrutan om det lagts till ytterligare vitaminer. Prev måste sättas om
-            if(prev != hej){
+            if(prev != vitaminLength){
                 document.getElementById("listComplement").innerHTML = "";
                 prev++;
             }
@@ -243,14 +203,7 @@ console.log("");
                 if(!compExists){
                     complementsList.push(complements[i].Livsmedelsnummer);
                     popoverContent =  calculateContent(complements[i].Livsmedelsnummer, i);
-<<<<<<< HEAD
-                    compText += "<ul>"+
-                                "<li id="+complements[i].Livsmedelsnummer+">"+
-                                "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
-                                "data-original-title='"+ complements[i].Livsmedelsnamn +"' data-trigger='hover'>"
-                                +complements[i].Livsmedelsnamn +"</a></li>"+"</ul>";
-=======
-/*http://jsfiddle.net/9P64a/*/
+
                     compText += "<ul>"+
                                 "<li id="+complements[i].Livsmedelsnummer+">"+
                                 "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
@@ -262,18 +215,12 @@ console.log("");
 
                                 "</a></li>"+
                                 "</ul>";
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
                 }
             }
         });
         
         document.getElementById("listComplement").innerHTML += compText;
-<<<<<<< HEAD
-=======
-        
         setHover();
-        //setClick();
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
     }
 
     function calculateContent(id){
@@ -311,11 +258,7 @@ console.log("");
 
             var popoverContent = calculateContent(id);
 
-<<<<<<< HEAD
-            $('.popoverData').popover({content: calculateContent(id)});
-=======
             $('.popoverData').popover();
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
         });
     }
 
@@ -343,17 +286,6 @@ console.log("");
 
     function setChosenRDI(chosenRDI){
         theChosenRDI = chosenRDI;
-    }
-
-    function percent(vitamin, value){
-        nameOfRDI.forEach(function(pos, j){
-            if(pos == vitamin)
-                index = j;
-        });
-
-        percent = Math.round(100 * (parseFloat(value)/parseFloat(theChosenRDI[index])));
-        console.log(percent)
-        return percent;
     }
 
     this.update = function(dataNumb) {

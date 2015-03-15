@@ -179,12 +179,7 @@ function barchart() {
                     table1.findCompl(arguments, chosenRDI);
                 }
                 else
-<<<<<<< HEAD
-                    console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% eller redan är tillagda")
-=======
                     console.log("Du kan endast lägga till vitaminer/mineraler som har < 100% och ej är tillagda")
-                
->>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
             })
 
         // TOMMA BARA FÖR ATT VIS TIP
@@ -211,10 +206,8 @@ function barchart() {
                 var vitList = table1.getVitamin();
                 //Man ska bara kunna lägga till vitaminen en gång
                 vitList.forEach(function(vl){
-                    //console.log("hej")
                     if(d.type == vl){
                         vitExists = true;
-                        //console.log("bajs")
                     }
                 })
 

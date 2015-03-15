@@ -69,7 +69,7 @@ function checkboxes(){
             var $this = $(this); // DETTA SER SKUMT UT MEN ÄR BARA ETT NAMN
             if($this.prop('checked')) { // check select status
                 livsNumb.push($this.val());
-                console.log("FLER " + livsNumb);
+                
                 donut1.update(livsNumb);
                 bar1.update(livsNumb);
                 table1.update(livsNumb);
@@ -78,7 +78,7 @@ function checkboxes(){
                 if (index > -1) {
                     livsNumb.splice(index, 1);
                 }
-                console.log("FÄRRE " + livsNumb);
+                
                 donut1.update(livsNumb);
                 bar1.update(livsNumb);
                 table1.update(livsNumb);
