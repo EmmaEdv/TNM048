@@ -1,7 +1,7 @@
 function table(){
 
     var color = d3.scale.category20();
-    var nrOfShownCompl = 5;
+    var nrOfShownCompl = 5, prev = 0;
     var theChosenRDI,
         vitaminList = [],
         complementsList = [],
@@ -39,37 +39,61 @@ function table(){
                     index = j;
             });
             missing.push(100 - Math.round(100 * ((d.sum)/theChosenRDI[index])))
+<<<<<<< HEAD
+=======
+
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
         });
 
         nrOfShownCompl = 5*vitaminList.length;
 
+<<<<<<< HEAD
         //Step är hur stort spann vi har på intervallet från hur mycket som saknas.
+=======
+        //Step är hur stort spann vi har på intervallet från hur mycket som saknas. 
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
         var step = 1;
         var lessThanFive = true;
-        var robert = -1;
+        var whichRDI = -1;
         //I complements spar vi de livsmedel som man kan äta som komplement
         
         var theData = bar1.getData();
         //För vardera livsmedel kollar vi hur deras vitaminer står sig mot intervallet.
         while(lessThanFive){
             theData.forEach(function(c, h){
+<<<<<<< HEAD
                 //sortera sen på de valda kategorierna
                 //Eller kolla om den inlagda redan finns i arrayen?
                 //För varje vitamin
                 var vitindex = 0;
                 vitamin.forEach(function(d, i){   
                     //sparar en temp för att inte spara över datan, är det nödvändigt?
+=======
+                
+                //För varje vitamin
+                var vitindex = 0;
+                vitamin.forEach(function(d, i){   
+
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
                     nameOfRDI.forEach(function(pos, j){
                         if(pos == d.type)
-                            robert = j;
+                            whichRDI = j;
                     });
-
+                    //sparar data item i en temporär då vi vill lägga till attrubut
                     var temp = c;
+<<<<<<< HEAD
                     var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[robert]));
                     var max = missing[i] + step,
                         min = missing[i] - step;
+=======
+                    
+                    var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[whichRDI]));
+                    
+                    var max = missing[i] + step;
+                    var min = missing[i] - step;
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
 
                     if(dataObjPercent >= min && dataObjPercent <= max){
                         if(complements.length < nrOfShownCompl){
@@ -88,20 +112,27 @@ function table(){
         }
 
         //Adderar differenserna för att sedan sortera på det för att få fram bästa alternativ
-        //Just nu visas ju bara en kategori åt gången.. heehehe
         complements.forEach(function(n){
             var diff = 0,
                 percent = 0;
+<<<<<<< HEAD
 
             vitamin.forEach(function(d,i){ 
                 diff += Math.abs(missing[i]-n[d.type]); 
                 percent = Math.round(100 * (n[d.type]/theChosenRDI[intearguments[1]]));
+=======
+            var temp = [];
+            vitamin.forEach(function(d,i){ 
+                diff += Math.abs(missing[i]-n[d.type]); 
+                percent = Math.round(100 * (n[d.type]/theChosenRDI[intearguments[1]]));
+                temp.push({vit: d.type, per: percent});
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
             }); 
             n.diff = diff;
             n.percent = percent;
         });
 
-        // SCOOOOORRRRE
+        //Beräkna score
         complements.forEach(function(d,i){
             var percent = 0, weight = 1;
 
@@ -118,7 +149,7 @@ function table(){
                     weight += percent;
 
             });
-            d.weight = (weight/100);
+            d.weight = Math.round(weight)/100;
         });
 
         complements.sort(function(a, b){ 
@@ -127,11 +158,11 @@ function table(){
 
         var compindex = 0;
         complements.forEach(function(d,i){
-            var hej = "", index = -1;
+            var output = "", index = -1;
             var percent = 0;
-            var weight = 0.01;
-            hej += d.Livsmedelsnamn + " ";
-            if(compindex < nrOfShownCompl) {
+
+            output += d.Livsmedelsnamn + " ";
+            if(compindex < 2) {
                 vitaminList.forEach(function(e){
                     nameOfRDI.forEach(function(pos, j){
                         if(pos == e)
@@ -139,18 +170,30 @@ function table(){
                     })
                     percent = Math.round(100 * (d[e]/theChosenRDI[index]));
 
-                    hej += e + " " + d[e] + ": " + percent + "% ";
+                    output += e + " " + d[e] + ": " + percent + "% ";
                 });
+<<<<<<< HEAD
                 hej += " weighted score: " + d.weight;
                 console.log(hej);
+=======
+                output += " Score: " + d.weight;
+                
+                console.log(output);
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
                 compindex++;
             }
            
         });
+<<<<<<< HEAD
     console.log("");
     console.log("=======================================================");
     console.log("");
         //Vikta:
+=======
+console.log("");
+console.log("=======================================================");
+console.log("");
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
 
         //LISTAN
         //Färgad fyrkant:
@@ -178,31 +221,59 @@ function table(){
         var compText = ""; 
         
         var popoverContent = "";
-
+        
+        var hej = vitaminList.length;
         //Lista med varje komplement + popoverruta
         complements.forEach(function(b,i){
+            //Töm textrutan om det lagts till ytterligare vitaminer. Prev måste sättas om
+            if(prev != hej){
+                document.getElementById("listComplement").innerHTML = "";
+                prev++;
+            }
+
             var compExists = false;
-            if(i<nrOfShownCompl){
+            if(i<2){
                 //Livsmedlet ska bara vara med en gång
                 complementsList.forEach(function(cl){
                     if(complements[i].Livsmedelsnummer == cl){
-                        compExists = true;
+                        compExists = false;
                     }
                 });
 
                 if(!compExists){
                     complementsList.push(complements[i].Livsmedelsnummer);
                     popoverContent =  calculateContent(complements[i].Livsmedelsnummer, i);
+<<<<<<< HEAD
                     compText += "<ul>"+
                                 "<li id="+complements[i].Livsmedelsnummer+">"+
                                 "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
                                 "data-original-title='"+ complements[i].Livsmedelsnamn +"' data-trigger='hover'>"
                                 +complements[i].Livsmedelsnamn +"</a></li>"+"</ul>";
+=======
+/*http://jsfiddle.net/9P64a/*/
+                    compText += "<ul>"+
+                                "<li id="+complements[i].Livsmedelsnummer+">"+
+                                "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
+                                "data-original-title='"+ complements[i].Livsmedelsnamn +"' + data-content=' Score: "+
+                                complements[i].weight +
+                                "' data-trigger='hover'>"+
+                                
+                                complements[i].Livsmedelsnamn +
+
+                                "</a></li>"+
+                                "</ul>";
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
                 }
             }
         });
         
         document.getElementById("listComplement").innerHTML += compText;
+<<<<<<< HEAD
+=======
+        
+        setHover();
+        //setClick();
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
     }
 
     function calculateContent(id){
@@ -236,12 +307,15 @@ function table(){
     function setHover(){
         //Remove from this list & add to checkboxes... 
         $('#table li').hover(function(){
-            console.log("HOVER")
             var id = $(this).attr("id");
 
             var popoverContent = calculateContent(id);
 
+<<<<<<< HEAD
             $('.popoverData').popover({content: calculateContent(id)});
+=======
+            $('.popoverData').popover();
+>>>>>>> c71210a4a56abae9d966c7b153873ffc3faa81d4
         });
     }
 
@@ -249,11 +323,9 @@ function table(){
         //Remove from this list & add to checkboxes... 
         $('#table ul').click(function(){
             var id = $(this).attr("id");
-            //console.log(id);
             document.getElementById(id).remove(this.selectedIndex);
             console.log("TODO: LÄGG TILL LIVSMEDEL MED NR: " + id[0] + " TILL LISTAN MED LIVSMEDEL & UPPDATERA GRAFER.");
             //LÄGG TILL LIVSMEDLET MED DETTA ID I LISTAN OCH UPPDATERA BARCHART & DONUT OSV
-
         });
     }    
 
