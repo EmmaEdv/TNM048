@@ -1,8 +1,6 @@
 function donut(){
 
-    var self = this; // for internal d3 functions
-
-    // var objects = {"Protein(g)", "Fett(g)", "Kolhydrater(g)","Fibrer(g)","Salt(g)","Vatten(g)"};
+    var self = this;
     var objects = {};
     var summedValueOfDatum = [];
     var typeOfDatum = ["Protein(g)", "Fett(g)", "Kolhydrater(g)","Fibrer(g)","Salt(g)","Vatten(g)"];
@@ -15,8 +13,6 @@ function donut(){
     var margin = [30, 10, 10, 10],
         width = pcDiv.width() - margin[1] - margin[3],
         height = pcDiv.height() - margin[0] - margin[2],
-        //width = 960,
-        //height = 500,
         radius = (Math.min(width, height) / 2) - margin[0] - margin[2];
 
     var arc = d3.svg.arc()
@@ -26,8 +22,7 @@ function donut(){
     var pie = d3.layout.pie()
         .sort(null)
         .value(function(d, i) {
-            return d["sum"]; }); // Detta ändras beroende på vad vi vill pie ska delas upp enligt. Nu är det
-        //.value(function(d) {return d["Fett(g)"]; });
+            return d["sum"]; }); // Detta ändras beroende på vad vi vill pie ska delas upp enligt. 
 
     var svg = d3.select("#donut").append("svg")
     .attr("width", width)
@@ -40,7 +35,6 @@ function donut(){
         .offset([-10, 0])
         .html(function(d, i) {
             var procentRDI = Math.round(100 * procent(d,i))
-            //return "<strong>" + d.type + ":</strong> <span style='color:black'>" + procentRDI + "% av RDI</span>";
             return "<strong>" + d.type + ":</strong> <span style='color:" + color(i) + "'>" + procentRDI + "% av RDI</span>";
         });
 
@@ -52,44 +46,7 @@ function donut(){
         var summedIntake = {};
         var idOfDatum = [710];
 
-        // DETTA KAN NOG GÖRAS I PROCcESS
-        /*self.data.forEach(function(c){
-            if(index < 4){
-                idOfDatum.push(c["Livsmedelsnummer"]);
-                index++;
-            }
-        });*/
-
-        // MÅSTE FINNAS ETT BÄTTRE SÄTT!!!!!! För man inte kan += ett var utan värde
-        /*typeOfDatum.forEach(function(o){
-            summedIntake[o] = 0;
-        });
-     
-        self.data.forEach(function(c){
-
-            if(index < 4){
-                dataFoo.push(c);
-                typeOfDatum.forEach(function(o){
-                    summedIntake[o] += +c[o];
-                    totalGram += +c[o];
-                })
-                
-                index++;
-            }
-        });
-
-        // DETTA GÖRS BARA FÖR ATT PIE VILL HA DET [object, object object]. Vet inte hur man löser med {protein: .....}
-        typeOfDatum.forEach(function(f){
-            summedValueOfDatum.push({
-                type: f,
-                sum: +summedIntake[f]     
-            })
-        })*/
-      //  console.log(idOfDatum);
         foo = processdata(idOfDatum)
-        //draw(foo[0], foo[1]);
-        //console.log("innan draw: " + foo[1][3].sum);
-        //draw(foo[1]);
     });
     
     function processdata(choosenFoodNumber) {
@@ -106,16 +63,11 @@ function donut(){
         self.data.forEach(function(c){
             choosenFoodNumber.forEach(function(cfn){
                 if(c["Livsmedelsnummer"] == cfn) {
-                    //console.log("inne")
-                    //choosenDatum.push(c);
                     typeOfDatum.forEach(function(t){
                         calIntake[t] += +c[t];
                         totalGram += +c[t];
                     })
                     index++;
-                    /*dataFoo.push({
-                        Namn: c["Livsmedelsnamn"],
-                        Energi: c["Energi (kJ)(kJ)"]});*/
                 }
             })
         });
@@ -127,26 +79,16 @@ function donut(){
             })
         })
         draw(summedCalIntake);
-        //return [choosenDatum, summedCalIntake]
-        
     }
 
     //function draw(data, intake){
     function draw(intake){
-        
-        //console.log(data);
-        //console.log(intake);
-        //console.log(typeOfDatum);
-        //console.log("INTAKE: " + intake)
         svg.selectAll("*").remove();
 
-        //console.log("DRAW INTAKE: " + intake[1].sum)
         var g = svg.selectAll(".arc")
             .data(pie(intake))
             .enter().append("g")
             .attr("class", "arc");
-
-        //console.log([intake])
 
         var indexColor = 0;
         g.append("path")
@@ -160,53 +102,36 @@ function donut(){
                 indexColor++;
                 return sendColor;
             });
-            /*.on('mouseover', function(d,i) { console.log(d)})
-            .on('mouseout', tip);*/
-
-        // TA X,Y POS SEN RITA?
-
+        
+        // TA X,Y POS SEN RITA ut text utanför?
         var indexText = 0;
         g.append("text")
             .attr("class", "text")
             .attr("transform", function(d) {
-                var c = arc.centroid(d),
-                    x = c[0],
-                    y = c[1],
-                    // pythagorean theorem for hypotenuse
-                h = Math.sqrt(x*x + y*y);
-                return "translate(" + (x/h * (radius+10)) +  ',' + (y/h * (radius+10)) +  ")"; 
+                    var c = arc.centroid(d),
+                        x = c[0],
+                        y = c[1],
+                    h = Math.sqrt(x*x + y*y);
+                    return "translate(" + (x/h * (radius+10)) +  ',' + (y/h * (radius+10)) +  ")"; 
                 })
-            //.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
             .attr("dy", ".35em")
             .attr("text-anchor", function(d) {
                     return (d.endAngle + d.startAngle)/2 > Math.PI ? "end" : "start";
                 })
             .text(function(d, i) {
-                //console.log(data[1]["Energi (kJ)(kJ)"]);
-                //var text = data[indexText]["Livsmedelsnamn"];
                 var percent = Math.round((intake[i]["sum"] / totalGram) * 100);
                 var text = percent + "% " + intake[i]["type"];
                 indexText++;
-
                 // Kanske ska lösas snyggare
                 if(percent != 0)
                     return text;
                 else
                     return null;
             });
-
-
-
-
     }
 
     this.update = function(dataNumb) {
-        //console.log(dataNumb);
-        //draw(dataFoo, dataNumb);
-       // console.log("Uppdaterar donut: " + dataNumb);
-
         processdata(dataNumb);
-        // drawAllExcept([123, 12,3 1,2 3123]);
     }
 }
 

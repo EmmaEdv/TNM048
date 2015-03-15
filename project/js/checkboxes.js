@@ -16,34 +16,8 @@ function checkboxes(){
         var index = 0;
         var dataFoo = [710];
         var summedIntake = {};
-
-        // // MÅSTE FINNAS ETT BÄTTRE SÄTT!!!!!! För man inte kan += ett var utan värde
-        // typeOfDatum.forEach(function(o){
-        //     summedIntake[o] = 0;
-        // });
-     
-        // self.data.forEach(function(c){
-
-        //     if(index < 4){
-        //         dataFoo.push(c);
-        //         typeOfDatum.forEach(function(o){
-        //             summedIntake[o] += +c[o];
-        //             totalGram += +c[o];
-        //         })
-        //         index++;
-        //     }
-        // });
-
-        // // DETTA GÖRS BARA FÖR ATT PIE VILL HA DET [object, object object]. Vet inte hur man löser med {protein: .....}
-        // typeOfDatum.forEach(function(f){
-        //     summedValueOfDatum.push({
-        //         type: f,
-        //         sum: +summedIntake[f]    
-        //     })
-        // })
         
         processdata(dataFoo);
-        //draw(dataFoo, summedValueOfDatum);
     });
 
     function processdata(choosenfoodnumber) {
@@ -51,7 +25,7 @@ function checkboxes(){
         var dataFoo = [];
         var summedIntake = {};
 
-        // MÅSTE FINNAS ETT BÄTTRE SÄTT!!!!!! För man inte kan += ett var utan värde
+        // MÅSTE FINNAS ETT BÄTTRE SÄTT ATT LÖSA DETTA PÅ.. För man inte kan += ett var utan värde
         typeOfDatum.forEach(function(o){
             summedIntake[o] = 0;
         });
@@ -81,10 +55,9 @@ function checkboxes(){
     }
 
     function draw(data, intake) {
-
-        // document.getElementById("checkBox").innerHTML = "";
         var foo = '';
         var livsNumb = [];
+
         data.forEach( function(d) {
             foo += "<label class='check'><input type='checkbox' value='" 
                     + d["Livsmedelsnummer"] + "' checked/>" + d["Livsmedelsnamn"] + "<br><label>";
@@ -92,7 +65,7 @@ function checkboxes(){
         });
         $('#checkBox').html(foo);
        
-        $('#checkBox').on('click', 'input', function(event) {  //on click 
+        $('#checkBox').on('click', 'input', function(event) { 
             var $this = $(this); // DETTA SER SKUMT UT MEN ÄR BARA ETT NAMN
             if($this.prop('checked')) { // check select status
                 livsNumb.push($this.val());
@@ -114,7 +87,6 @@ function checkboxes(){
     }
 
      this.update = function(choosenfoodnumbers) {
-       // console.log("checkbox uppdaterat: " + choosenfoodnumbers);
         processdata(choosenfoodnumbers);
     }
 }

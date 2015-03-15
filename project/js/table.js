@@ -29,10 +29,6 @@ function table(){
             highest = [], index = -1; //missing ska innehålla den mängd som fattas för vardera typ som är vald.
     
         args.push(intearguments[0]);
-        //Just nu skickas ju endast in ett argument.....
-        /*args.forEach(function(d,i){
-            vitamin.push(intearguments[i][0]);
-        })*/
 
         vitamin.push(intearguments[0])
 
@@ -43,15 +39,13 @@ function table(){
                     index = j;
             });
             missing.push(100 - Math.round(100 * ((d.sum)/theChosenRDI[index])))
-           // missing.push(percent(intearguments[0].type, (intearguments[0].sum-d.sum)));
-//            missing.push(chosenRDI[intearguments[1]] - d.sum);
             highest.push({"Livsmedelsnamn": "dummy", "Livsmedelsnummer": -1});
             highest[i][d.type] = 0;
         });
-//console.log("vitaminlängd", vitaminList.length)
+
         nrOfShownCompl = 5*vitaminList.length;
 
-        //Step är hur stort spann vi har på intervallet från hur mycket som saknas. (Nu i enheter, kanske bättre med %?)
+        //Step är hur stort spann vi har på intervallet från hur mycket som saknas.
         var step = 1;
         var lessThanFive = true;
         var robert = -1;
@@ -63,51 +57,19 @@ function table(){
             theData.forEach(function(c, h){
                 //sortera sen på de valda kategorierna
                 //Eller kolla om den inlagda redan finns i arrayen?
-                //console.log(c[type], missing-interval, missing+interval)
                 //För varje vitamin
                 var vitindex = 0;
                 vitamin.forEach(function(d, i){   
-                    //console.log(missing[i]-step, c[t.type], missing[i]+step)
                     //sparar en temp för att inte spara över datan, är det nödvändigt?
-
                     nameOfRDI.forEach(function(pos, j){
                         if(pos == d.type)
                             robert = j;
                     });
 
                     var temp = c;
-                    //console.log("två",d.type, temp[d.type])
                     var dataObjPercent = Math.round(100 * (temp[d.type]/theChosenRDI[robert]));
-                    
-                    /*while(lessThanFive){
-                        //Om dess innehåll är inom intervallen:
-                        //console.log(missing[i])
-                        //console.log(dataObjPercent, (missing[i]-step))
-                        
-                        //if(dataObjPercent >= ((missing[i]-step) < 0 ? 0 : (missing[i]-step)) && dataObjPercent <= (missing[i]+step)){ 
-                            //Spara den med det bästa intervallet. :)
-                            //Spara differensen mellan livsmedlets innehåll och vad som saknas.
-                            //temp.compType = d.type;
-                            
-                            
-                           // complements.push(temp);
-                           // console.log("Inom intervallen, lägger till: ", temp.Livsmedelsnamn, temp.hej)
-                        //}
-                        //Vill spara det livsmedel som har störst innehåll  
-                        // else if(c[d.type] > highest[i][d.type]){ 
-                        //     temp.compType = d.type;
-                        //     highest[i] = temp;
-                        //     //Samma livsmedel bör bara adderas en gång
-                        //     if(complements.length == 0 || (complements[complements.length-1].Livsmedelsnummer != temp.Livsmedelsnummer))
-                        //         complements.push(temp);
-                        // }
-                        //if(complements.length > 5)
-                            //lessThanFive = false;
-                        
-                        step += 5;
-                    }*/
-                    var max = missing[i] + step;
-                    var min = missing[i] - step;
+                    var max = missing[i] + step,
+                        min = missing[i] - step;
 
                     if(dataObjPercent >= min && dataObjPercent <= max){
                         if(complements.length < nrOfShownCompl){
@@ -130,22 +92,14 @@ function table(){
         complements.forEach(function(n){
             var diff = 0,
                 percent = 0;
-            /*var diff = [],
-                percent = [];*/
+
             vitamin.forEach(function(d,i){ 
                 diff += Math.abs(missing[i]-n[d.type]); 
                 percent = Math.round(100 * (n[d.type]/theChosenRDI[intearguments[1]]));
-                //diff.push(Math.abs(missing[i]-n[d.type]));
-                //percent.push((n[d.type] + d[d.type])/chosenRDI[i]);
             }); 
             n.diff = diff;
             n.percent = percent;
         });
-        
-        //SORTERA alla funna komplement på differensen, lägst differens är bäst (a.diff-b.diff)
-        /*complements.sort(function(a, b){ 
-            return b.percent-a.percent; 
-        });*/
 
         // SCOOOOORRRRE
         complements.forEach(function(d,i){
@@ -159,9 +113,9 @@ function table(){
 
                 percent = Math.round(100 * (d[e]/theChosenRDI[index]));
                 if(percent > 100)
-                    weight *= 100;
+                    weight += 1.1*100;
                 else
-                    weight *= percent;
+                    weight += percent;
 
             });
             d.weight = (weight/100);
@@ -188,24 +142,21 @@ function table(){
                     hej += e + " " + d[e] + ": " + percent + "% ";
                 });
                 hej += " weighted score: " + d.weight;
-                //hej += <br>+"-------------------------------------------------------";
                 console.log(hej);
                 compindex++;
             }
            
         });
-console.log("");
-console.log("=======================================================");
-console.log("");
+    console.log("");
+    console.log("=======================================================");
+    console.log("");
         //Vikta:
 
         //LISTAN
         //Färgad fyrkant:
         var colorOfRDI = rdiColor[1].color;
         rdiColor.forEach(function(d) {
-                            //console.log(d.type + " LIKA " + intearguments[0].type);
                             if(d.type == intearguments[0].type) {
-                                //console.log('YÄÄÄ');
                                 colorOfRDI = d.color;
                             }
                         })
@@ -241,26 +192,17 @@ console.log("");
 
                 if(!compExists){
                     complementsList.push(complements[i].Livsmedelsnummer);
-                    popoverContent =  calculateContent(complements[i].Livsmedelsnummer, i);//complements[i].compType + " " + complements[i].percent;
-/*http://jsfiddle.net/9P64a/*/
+                    popoverContent =  calculateContent(complements[i].Livsmedelsnummer, i);
                     compText += "<ul>"+
                                 "<li id="+complements[i].Livsmedelsnummer+">"+
                                 "<a style='color: black;' class='popoverData' class='btn' href='#' rel='popover' data-placement='bottom' " + 
-                                "data-original-title='"+ complements[i].Livsmedelsnamn +"' data-trigger='hover'>"+
-                                
-                                complements[i].Livsmedelsnamn +
-                                 //   "100 g "+ complements[i].Livsmedelsnamn + "<br> ger dig <b>" + complements[i].percent + "%</b> mer av <b>" + complements[i].compType + "</b>"+
-                                "</a></li>"+
-                                "</ul>";
+                                "data-original-title='"+ complements[i].Livsmedelsnamn +"' data-trigger='hover'>"
+                                +complements[i].Livsmedelsnamn +"</a></li>"+"</ul>";
                 }
             }
         });
         
         document.getElementById("listComplement").innerHTML += compText;
-        
-        //var popOver = "<a id='popoverOption' class='btn' href='#' data-content="+complements[0].Livsmedelsnummer+" rel='popover' data-placement='bottom' data-original-title=" + complements[0].Livsmedelsnamn + "data-trigger='hover'>Popup with option trigger</a>"
-        //setHover();
-        //setClick();
     }
 
     function calculateContent(id){
@@ -269,7 +211,6 @@ console.log("");
             perc = "";
         var index = -1;
 
-        //console.log("complementslist",complementsList)
         complementsList.forEach(function(cl,n){
             if(id == cl){
                 //nr = vilken position i listan detta livsmedel har.
@@ -283,14 +224,11 @@ console.log("");
                     });
                     
                     perc = Math.round(100 * (complements[nr][vl]/theChosenRDI[index]));
-                  //  console.log(complements[nr].Livsmedelsnamn+":", vl+": ", perc)
                     popoverContent += "" + vl + " ökar med " + perc + "% ";
                 })
 
             }
         })
-
-        //console.log(nr, complements[nr], id, vitaminList);
 
         return popoverContent;
     }
@@ -303,9 +241,7 @@ console.log("");
 
             var popoverContent = calculateContent(id);
 
-            //TODO: TROR INTE ATT DETTA STÄMMER HELT & HÅLLET... 
             $('.popoverData').popover({content: calculateContent(id)});
-            //$('.popoverData').popover({title: complements[nr].Livsmedelsnamn, content: popoverContent});
         });
     }
 
@@ -322,12 +258,10 @@ console.log("");
     }    
 
     this.setVitamin = function(vitamin){
-        //console.log("pushing ", vitamin);
         vitaminList.push(vitamin);
     }
 
     this.getVitamin = function(){
-       // console.log("getting vitaminlist");
         return vitaminList;
     }
 
@@ -351,9 +285,6 @@ console.log("");
     }
 
     this.update = function(dataNumb) {
-        //console.log(dataNumb);
-        //draw(dataFoo, dataNumb);
-       // console.log("Uppdaterar table: " + dataNumb);
         vitaminList = [];
         document.getElementById("listVitamins").innerHTML = "";
         document.getElementById("listComplement").innerHTML = "";
